@@ -1,0 +1,80 @@
+.todolists-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 20px;
+    margin: 0 50px 0 50px;
+}
+
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} 
+
+.task {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+
+    width: 50%;
+}
+
+.task:hover {
+    background: #fbfdff
+}
+
+.task-checkbox {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-body {
+    flex: 1;
+    min-width: 0
+}
+
+.task-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0;
+    word-break: break-word;
+}
+
+.task-text {
+    margin-left: 8px;
+    font-size: 16px;
+    line-height: 1.4;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.task-desc {
+    margin-left: 8px;
+    font-size: 16px;
+    line-height: 1.4;
+    cursor: pointer;
+    color: gray;
+}
+
+.task-edit {
+    margin-left: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.task-left {
+    display: flex;
+    align-items: center;
+}
+
+.overdue-highlight {
+    color: red;
+}

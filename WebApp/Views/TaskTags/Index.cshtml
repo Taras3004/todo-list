@@ -1,0 +1,34 @@
+@using WebApp.Models.ViewModels
+@model List<TaskTagViewModel>
+
+<div class="tasks-container">
+    @foreach (var viewModel in Model)
+    {
+        <div class="task">
+            <a>@viewModel.Instance.Tag</a>
+
+            <a class="btn btn-primary"
+               asp-controller="TaskTagEdit"
+               asp-action="Edit"
+               asp-route-id="@(viewModel.Instance.Id)"
+               asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)">
+                Edit
+            </a>
+            
+            <a class="btn btn-primary"
+               asp-controller="TaskTagEdit"
+               asp-action="Delete"
+               asp-route-id="@(viewModel.Instance.Id)"
+               asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)">
+                Delete
+            </a>
+        </div>
+    }
+    
+    <a asp-controller="TaskTagEdit"
+       asp-action="Create"
+       asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+       class="btn btn-primary">
+        Create new
+    </a>
+</div>

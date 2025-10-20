@@ -1,0 +1,15 @@
+@WebApi_HostAddress = https://localhost:7055
+POST {{WebApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+{
+  "Email": "giganiga@mail.com",
+  "Password": "Password123!"
+}
+###
+
+GET {{WebApi_HostAddress}}/api/TestAuth/Public
+###
+
+GET {{WebApi_HostAddress}}/api/TestAuth/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnaWdhbmlnYUBtYWlsLmNvbSIsImVtYWlsIjoiZ2lnYW5pZ2FAbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijk1ZDQ5MTdmLThhNzctNDI1ZC1hNjc5LWE3Y2JmZWRmMWZlZSIsImp0aSI6ImUzMWYzMjdhLTM3N2QtNGQ2OS1hNTVlLTFmMjhhNDIwZTE2MSIsImV4cCI6MTc2MDM5MDc1NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzA1NSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxODkifQ.XDQNjlFb3kAtnlufzDQONroSiOgxy_hBZSDXnceOGJM
+###

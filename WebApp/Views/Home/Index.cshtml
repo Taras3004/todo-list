@@ -1,0 +1,41 @@
+@using WebApp.Models.ViewModels
+@model List<TodoListViewModel>
+
+<div class="todolists-container">
+    @foreach (var viewModel in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@viewModel.Instance.Name</h5>
+                    <p class="card-text text-muted">@viewModel.Instance.Description</p>
+                    <a asp-controller="TodoTask"
+                       asp-action="Index"
+                       asp-route-todoListId="@viewModel.Instance.Id"
+                       class="btn btn-primary">View
+                    </a>
+                    <a asp-controller="TodoListEdit"
+                       asp-action="Delete"
+                       asp-route-id="@viewModel.Instance.Id"
+                       class="btn btn-primary">Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    
+    <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Create new</h5>
+                <p class="card-text text-muted">Create new to-do list</p>
+                <a asp-controller="TodoListEdit"
+                   asp-action="Create"
+                   asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+                   class="btn btn-primary">
+                    Create new
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

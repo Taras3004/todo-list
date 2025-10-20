@@ -1,0 +1,41 @@
+@model WebApp.Models.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Реєстрація";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <h4>Створіть новий обліковий запис.</h4>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Зареєструватися</button>
+
+            <div class="mt-3">
+                <p>
+                    <a asp-action="Login">Вже маєте акаунт? Увійти</a>
+                </p>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

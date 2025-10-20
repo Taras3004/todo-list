@@ -1,0 +1,30 @@
+@using WebApp.Models.ViewModels
+@model TodoListViewModel
+
+<h1>@ViewData["Title"] list</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Instance.Id" />
+    <input type="hidden" asp-for="Instance.UserId" />
+    <input type="hidden" asp-for="ReturnUrl" />
+
+    <div class="mb-3">
+        <label asp-for="Instance.Name" class="form-label"></label>
+        <input asp-for="Instance.Name" class="form-control" />
+        <span asp-validation-for="Instance.Name"></span>
+    </div>
+    
+    <div class="mb-3">
+        <label asp-for="Instance.Description" class="form-label"></label>
+        <input asp-for="Instance.Description" class="form-control" />
+        <span asp-validation-for="Instance.Description"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a
+        asp-action="Cancel"
+        asp-route-returnUrl="@Model.ReturnUrl"
+        class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
