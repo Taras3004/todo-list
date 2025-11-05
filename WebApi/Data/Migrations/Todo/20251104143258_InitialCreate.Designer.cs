@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApi.Entities.TodoDb;
+using WebApi.Model.Entities.TodoDb;
 
 #nullable disable
 
 namespace WebApi.Data.Migrations.Todo
 {
     [DbContext(typeof(TodoListDbContext))]
-    [Migration("20251013154303_InitialTodoCreate")]
-    partial class InitialTodoCreate
+    [Migration("20251104143258_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace WebApi.Data.Migrations.Todo
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TagToTask", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TagToTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.ToTable("TagToTask");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TaskComment", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TaskComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.ToTable("TaskComments");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TaskTag", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TaskTag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +88,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.ToTable("TaskTags");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TodoList", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoList", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,7 +115,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TodoTask", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,9 +134,6 @@ namespace WebApi.Data.Migrations.Todo
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
-                    b.Property<int>("TaskTagId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TodoListId")
                         .HasColumnType("int");
 
@@ -145,7 +142,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.TodoDb.TodoTaskPage", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTaskPage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,9 +157,26 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("TodoTaskId");
+
                     b.ToTable("TaskPages");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTaskPage", b =>
+                {
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TodoTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
                 });
 #pragma warning restore 612, 618
         }

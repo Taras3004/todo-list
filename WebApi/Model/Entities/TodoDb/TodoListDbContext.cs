@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using WebApi.Entities.UsersDb;
+using WebApi.Model.Entities.UsersDb;
 
-namespace WebApi.Entities.TodoDb;
+namespace WebApi.Model.Entities.TodoDb;
 
 public class TodoListDbContext : DbContext
 {
@@ -25,5 +25,35 @@ public class TodoListDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Ignore<ApplicationUser>();
+
+        modelBuilder.Entity<TodoTaskPage>()
+            .HasOne(x => x.Task)
+            .WithOne()
+            .HasForeignKey<TodoTaskPage>(x => x.TodoTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TaskComment>()
+            .HasOne(x => x.Task)
+            .WithMany()
+            .HasForeignKey(x => x.TodoTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TagToTask>()
+            .HasOne(x => x.Task)
+            .WithMany()
+            .HasForeignKey(x => x.TodoTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TagToTask>()
+            .HasOne(x => x.Tag)
+            .WithMany()
+            .HasForeignKey(x => x.TaskTagId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TodoTask>()
+            .HasOne(x => x.TodoList)
+            .WithMany()
+            .HasForeignKey(x => x.TodoListId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

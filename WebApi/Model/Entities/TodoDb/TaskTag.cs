@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using WebApi.Entities.UsersDb;
+using WebApi.Model.Entities.UsersDb;
 
-namespace WebApi.Entities.TodoDb;
+namespace WebApi.Model.Entities.TodoDb;
 
 public class TaskTag : BaseEntity, IUserOwnedEntity
 {

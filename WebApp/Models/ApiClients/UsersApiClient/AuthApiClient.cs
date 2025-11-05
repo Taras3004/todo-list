@@ -20,7 +20,7 @@ public class AuthApiClient
             return await response.Content.ReadFromJsonAsync<TokenDto>();
         }
 
-        return null; // або кидати виняток, якщо логін невдалий
+        return null;
     }
 
     public async Task<bool> RegisterAsync(RegisterViewModel registerModel)

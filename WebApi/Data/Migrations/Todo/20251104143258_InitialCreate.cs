@@ -1,3 +1,4 @@
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -5,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApi.Data.Migrations.Todo
 {
     /// <inheritdoc />
-    public partial class InitialTodoCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,27 +41,12 @@ namespace WebApi.Data.Migrations.Todo
                 });
 
             migrationBuilder.CreateTable(
-                name: "TaskPages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TodoTaskId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TaskPages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TodoListId = table.Column<int>(type: "int", nullable: false),
-                    TaskTagId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false)
@@ -98,6 +84,32 @@ namespace WebApi.Data.Migrations.Todo
                 {
                     table.PrimaryKey("PK_Todos", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "TaskPages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TodoTaskId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskPages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskPages_Tasks_TodoTaskId",
+                        column: x => x.TodoTaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskPages_TodoTaskId",
+                table: "TaskPages",
+                column: "TodoTaskId");
         }
 
         /// <inheritdoc />
@@ -113,13 +125,13 @@ namespace WebApi.Data.Migrations.Todo
                 name: "TaskPages");
 
             migrationBuilder.DropTable(
-                name: "Tasks");
-
-            migrationBuilder.DropTable(
                 name: "TaskTags");
 
             migrationBuilder.DropTable(
                 name: "Todos");
+
+            migrationBuilder.DropTable(
+                name: "Tasks");
         }
     }
 }

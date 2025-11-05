@@ -1,4 +1,4 @@
-using WebApi.Entities.TodoDb;
+using WebApi.Model.Entities.TodoDb;
 using WebApp.Models.ApiClients.TodoListApiClient.Registrations;
 
 namespace WebApp.Models.ApiClients.TodoListApiClient;

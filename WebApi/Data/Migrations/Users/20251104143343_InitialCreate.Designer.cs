@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebApi.Entities.UsersDb;
+using WebApi.Model.Entities.UsersDb;
 
 #nullable disable
 
 namespace WebApi.Data.Migrations.Users
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20251013153720_InitialUsersCreate")]
-    partial class InitialUsersCreate
+    [Migration("20251104143343_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace WebApi.Data.Migrations.Users
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Entities.UsersDb.ApplicationUser", b =>
+            modelBuilder.Entity("WebApi.Model.Entities.UsersDb.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -234,7 +234,7 @@ namespace WebApi.Data.Migrations.Users
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WebApi.Entities.UsersDb.ApplicationUser", null)
+                    b.HasOne("WebApi.Model.Entities.UsersDb.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -243,7 +243,7 @@ namespace WebApi.Data.Migrations.Users
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WebApi.Entities.UsersDb.ApplicationUser", null)
+                    b.HasOne("WebApi.Model.Entities.UsersDb.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -258,7 +258,7 @@ namespace WebApi.Data.Migrations.Users
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApi.Entities.UsersDb.ApplicationUser", null)
+                    b.HasOne("WebApi.Model.Entities.UsersDb.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -267,7 +267,7 @@ namespace WebApi.Data.Migrations.Users
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WebApi.Entities.UsersDb.ApplicationUser", null)
+                    b.HasOne("WebApi.Model.Entities.UsersDb.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

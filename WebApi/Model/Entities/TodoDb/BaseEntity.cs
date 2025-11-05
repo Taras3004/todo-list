@@ -1,4 +1,4 @@
-namespace WebApi.Entities.TodoDb;
+namespace WebApi.Model.Entities.TodoDb;
 
 public abstract class BaseEntity
 {

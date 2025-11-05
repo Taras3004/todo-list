@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Entities.TodoDb;
-using WebApi.Entities.UsersDb;
+using WebApi.Model.Entities.TodoDb;
+using WebApi.Model.Entities.UsersDb;
 using WebApi.Model.UsersDb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +42,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Logging.AddFilter("LuckyPennySoftware.MediatR.License", LogLevel.None);
 
 var app = builder.Build();
 

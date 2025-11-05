@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Entities.TodoDb;
+using WebApi.Model.Entities.TodoDb;
 using WebApp.Models.ApiClients.TodoListApiClient;
 using WebApp.Models.ViewModels;
 

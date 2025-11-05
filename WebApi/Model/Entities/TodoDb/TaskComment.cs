@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApi.Entities.TodoDb;
+namespace WebApi.Model.Entities.TodoDb;
 
 public class TaskComment : BaseEntity
 {
@@ -8,6 +8,8 @@ public class TaskComment : BaseEntity
 
     public DateTime Created { get; set; }
 
-    [ForeignKey(nameof(TodoTask))]
+    [ForeignKey(nameof(Task))]
     public int TodoTaskId { get; set; }
+
+    public TodoTask Task { get; set; }
 }

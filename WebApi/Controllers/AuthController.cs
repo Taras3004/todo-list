@@ -4,31 +4,28 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Entities.UsersDb;
+using WebApi.Model.Entities.UsersDb;
 
 namespace WebApi.Controllers;
 
-public record RegisterDto(string Email, string Password);
+public record RegisterDto(string Email, string Password, string ConfirmPassword);
 
 public record LoginDto(string Email, string Password);
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+    : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> userManager;
-    private readonly IConfiguration configuration;
-
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
-    {
-        this.userManager = userManager;
-        this.configuration = configuration;
-    }
-
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
-        var userExists = await this.userManager.FindByEmailAsync(registerDto.Email);
+        if (registerDto.Password != registerDto.ConfirmPassword)
+        {
+            return this.BadRequest("Password confirmation is not correct.");
+        }
+
+        var userExists = await userManager.FindByEmailAsync(registerDto.Email);
         if (userExists != null)
         {
             return this.BadRequest("User with this email already exists.");
@@ -36,7 +33,7 @@ public class AuthController : ControllerBase
 
         var user = new ApplicationUser { Email = registerDto.Email, UserName = registerDto.Email };
 
-        var result = await this.userManager.CreateAsync(user, registerDto.Password);
+        var result = await userManager.CreateAsync(user, registerDto.Password);
 
         if (!result.Succeeded)
         {
@@ -49,9 +46,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var user = await this.userManager.FindByEmailAsync(loginDto.Email);
+        var user = await userManager.FindByEmailAsync(loginDto.Email);
 
-        if (user != null && await this.userManager.CheckPasswordAsync(user, loginDto.Password))
+        if (user != null && await userManager.CheckPasswordAsync(user, loginDto.Password))
         {
             var token = this.GenerateJwtToken(user);
             return this.Ok(new { token });
@@ -62,9 +59,9 @@ public class AuthController : ControllerBase
 
     private string GenerateJwtToken(ApplicationUser user)
     {
-        var jwtKey = this.configuration["JsonWebTokenKeys:IssuerSigningKey"];
-        var jwtIssuer = this.configuration["JsonWebTokenKeys:ValidIssuer"];
-        var jwtAudience = this.configuration["JsonWebTokenKeys:ValidAudience"];
+        var jwtKey = configuration["JsonWebTokenKeys:IssuerSigningKey"];
+        var jwtIssuer = configuration["JsonWebTokenKeys:ValidIssuer"];
+        var jwtAudience = configuration["JsonWebTokenKeys:ValidAudience"];
 
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));

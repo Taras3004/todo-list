@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Entities.TodoDb;
+using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Controllers;
 
