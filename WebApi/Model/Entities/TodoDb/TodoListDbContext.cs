@@ -3,7 +3,7 @@ using WebApi.Model.Entities.UsersDb;
 
 namespace WebApi.Model.Entities.TodoDb;
 
-public class TodoListDbContext : DbContext
+public class TodoListDbContext(DbContextOptions<TodoListDbContext> options) : DbContext(options)
 {
     public DbSet<TodoList> Todos { get; set; }
 
@@ -16,9 +16,6 @@ public class TodoListDbContext : DbContext
     public DbSet<TagToTask> TagToTask { get; set; }
 
     public DbSet<TaskComment> TaskComments { get; set; }
-
-    public TodoListDbContext(DbContextOptions<TodoListDbContext> options) : base(options)
-    { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

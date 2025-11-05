@@ -42,3 +42,22 @@ Content-Type: application/json
 GET {{WebApi_HostAddress}}/api/task
 
 ###
+
+@id=4
+DELETE {{WebApi_HostAddress}}/api/task?id={{id}}
+
+###
+
+GET {{WebApi_HostAddress}}/api/taskcomment
+
+###
+
+POST {{WebApi_HostAddress}}/api/taskcomment
+Content-Type: application/json
+
+{
+  "Content": "bbb",
+  "TodoTaskId": "0"
+}
+
+###

@@ -3,11 +3,12 @@ using WebApi.Model.DTO;
 
 namespace WebApi.Features.Tasks.UpdateTask;
 
-public class UpdateTaskCommand : IRequest<TaskDto?>
+public class UpdateTaskCommand(int id, string name, DateTime deadline, bool isCompleted, string? description)
+    : IRequest<TaskDto?>
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public DateTime Deadline { get; set; }
-    public bool IsCompleted { get; set; }
-    public string? Description { get; set; }
+    public int Id { get; } = id;
+    public string Name { get; } = name;
+    public DateTime Deadline { get; } = deadline;
+    public bool IsCompleted { get; } = isCompleted;
+    public string? Description { get; } = description;
 }

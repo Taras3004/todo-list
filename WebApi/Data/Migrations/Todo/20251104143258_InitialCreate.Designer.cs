@@ -36,7 +36,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<int>("TaskTagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TodoTaskId")
+                    b.Property<int>("todoTaskId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -59,7 +59,7 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TodoTaskId")
+                    b.Property<int>("todoTaskId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -154,7 +154,7 @@ namespace WebApi.Data.Migrations.Todo
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("TodoTaskId")
+                    b.Property<int>("todoTaskId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -163,7 +163,7 @@ namespace WebApi.Data.Migrations.Todo
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TodoTaskId");
+                    b.HasIndex("todoTaskId");
 
                     b.ToTable("TaskPages");
                 });
@@ -172,7 +172,7 @@ namespace WebApi.Data.Migrations.Todo
                 {
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
                         .WithMany()
-                        .HasForeignKey("TodoTaskId")
+                        .HasForeignKey("todoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

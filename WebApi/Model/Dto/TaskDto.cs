@@ -1,6 +1,6 @@
 namespace WebApi.Model.DTO;
 
-public class TaskDto
+public record TaskDto
 {
     public int Id { get; set; }
     public string Name { get; set; }

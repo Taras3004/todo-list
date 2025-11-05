@@ -3,10 +3,10 @@ using WebApi.Model.DTO;
 
 namespace WebApi.Features.Tasks.CreateTask;
 
-public class CreateTaskCommand : IRequest<TaskDto>
+public class CreateTaskCommand(string name, DateTime deadline, string? description, int todoListId) : IRequest<TaskDto>
 {
-    public string Name { get; set; }
-    public DateTime Deadline { get; set; }
-    public string? Description { get; set; }
-    public int TodoListId { get; set; }
+    public string Name { get; } = name;
+    public DateTime Deadline { get; } = deadline;
+    public string? Description { get; } = description;
+    public int TodoListId { get; } = todoListId;
 }

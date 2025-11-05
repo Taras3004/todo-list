@@ -1,19 +1,18 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Features.Tasks.CreateTask;
-using WebApi.Features.Tasks.DeleteTask;
-using WebApi.Features.Tasks.GetTaskById;
-using WebApi.Features.Tasks.GetTasks;
-using WebApi.Features.Tasks.UpdateTask;
+using WebApi.Features.TagToTask.CreateTagToTask;
+using WebApi.Features.TagToTask.DeleteTagToTask;
+using WebApi.Features.TagToTask.GetTagToTaskById;
+using WebApi.Features.TagToTask.GetTagToTasks;
 
 namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TaskController(IMediator mediator) : ControllerBase
+public class TagToTaskController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTagToTaskCommand command)
     {
         var taskDto = await mediator.Send(command);
 
@@ -23,17 +22,9 @@ public class TaskController(IMediator mediator) : ControllerBase
     [HttpGet("{Id}")]
     public async Task<IActionResult> GetTask(int id)
     {
-        var query = new GetTaskByIdCommand(id);
+        var query = new GetTagToTaskByIdCommand(id);
 
         var taskDto = await mediator.Send(query);
-
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
-    }
-
-    [HttpPut]
-    public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskCommand command)
-    {
-        var taskDto = await mediator.Send(command);
 
         return taskDto == null ? this.NotFound() : this.Ok(taskDto);
     }
@@ -41,7 +32,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteTask(int id)
     {
-        var command = new DeleteTaskByIdCommand(id);
+        var command = new DeleteTagToTaskCommand(id);
 
         var isDeleted = await mediator.Send(command);
 
@@ -51,7 +42,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetTasks()
     {
-        var command = new GetTasksCommand();
+        var command = new GetTagToTasksCommand();
         var tasksDto = await mediator.Send(command);
 
         return this.Ok(tasksDto);

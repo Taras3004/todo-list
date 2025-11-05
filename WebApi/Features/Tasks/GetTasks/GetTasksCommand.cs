@@ -4,6 +4,4 @@ using WebApi.Model.DTO;
 
 namespace WebApi.Features.Tasks.GetTasks;
 
-public class GetTasksCommand : IRequest<List<TaskDto>>
-{
-}
+public class GetTasksCommand() : IRequest<List<TaskDto>>;

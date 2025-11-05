@@ -109,7 +109,7 @@ namespace WebApi.Data.Migrations.Todo
             migrationBuilder.CreateIndex(
                 name: "IX_TaskPages_TodoTaskId",
                 table: "TaskPages",
-                column: "TodoTaskId");
+                column: "todoTaskId");
         }
 
         /// <inheritdoc />

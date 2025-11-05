@@ -18,6 +18,8 @@ public class DeleteTaskHandler(TodoListDbContext context) : IRequestHandler<Dele
 
         context.Tasks.Remove(task);
 
+        await context.SaveChangesAsync(cancellationToken);
+
         return true;
     }
 }

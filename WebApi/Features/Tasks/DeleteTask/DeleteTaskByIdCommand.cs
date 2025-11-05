@@ -1,9 +1,8 @@
 using MediatR;
-using WebApi.Model.DTO;
 
 namespace WebApi.Features.Tasks.DeleteTask;
 
-public class DeleteTaskByIdCommand : IRequest<bool>
+public class DeleteTaskByIdCommand(int id) : IRequest<bool>
 {
-    public int Id { get; set; }
+    public int Id { get; } = id;
 }
