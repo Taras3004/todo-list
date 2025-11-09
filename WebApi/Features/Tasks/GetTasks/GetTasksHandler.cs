@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.DTO;
+using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.GetTasks;
@@ -9,7 +9,7 @@ public class GetTasksHandler(TodoListDbContext context) : IRequestHandler<GetTas
 {
     public async Task<List<TaskDto>> Handle(GetTasksCommand request, CancellationToken cancellationToken)
     {
-        var tasksDto = context.Tasks.Join(context.TaskPages, task => task.Id, page => page.TodoTaskId, (task, page) => new TaskDto()
+        var tasksDto = context.Tasks.Where(task => task.TodoListId == request.TodoListId).Join(context.TaskPages, task => task.Id, page => page.TodoTaskId, (task, page) => new TaskDto()
         {
             Id = task.Id,
             Name = task.Name,

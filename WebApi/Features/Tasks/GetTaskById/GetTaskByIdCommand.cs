@@ -1,5 +1,5 @@
 using MediatR;
-using WebApi.Model.DTO;
+using WebApi.Model.Dto;
 
 namespace WebApi.Features.Tasks.GetTaskById;
 

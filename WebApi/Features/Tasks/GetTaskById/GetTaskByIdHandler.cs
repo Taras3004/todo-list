@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.DTO;
+using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.GetTaskById;

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace WebApi.Model.Dto;
 
 public record TaskCommentDto

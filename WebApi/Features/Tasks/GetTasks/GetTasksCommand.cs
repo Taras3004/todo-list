@@ -1,7 +1,9 @@
-using System.Net;
 using MediatR;
-using WebApi.Model.DTO;
+using WebApi.Model.Dto;
 
 namespace WebApi.Features.Tasks.GetTasks;
 
-public class GetTasksCommand() : IRequest<List<TaskDto>>;
+public class GetTasksCommand() : IRequest<List<TaskDto>>
+{
+    public int TodoListId { get; set; }
+}

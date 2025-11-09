@@ -12,7 +12,7 @@ using WebApi.Model.Entities.TodoDb;
 namespace WebApi.Data.Migrations.Todo
 {
     [DbContext(typeof(TodoListDbContext))]
-    [Migration("20251104143258_InitialCreate")]
+    [Migration("20251109131421_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,10 +36,14 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<int>("TaskTagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("todoTaskId")
+                    b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TaskTagId");
+
+                    b.HasIndex("TodoTaskId");
 
                     b.ToTable("TagToTask");
                 });
@@ -59,10 +63,12 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("todoTaskId")
+                    b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TodoTaskId");
 
                     b.ToTable("TaskComments");
                 });
@@ -139,6 +145,8 @@ namespace WebApi.Data.Migrations.Todo
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TodoListId");
+
                     b.ToTable("Tasks");
                 });
 
@@ -154,7 +162,7 @@ namespace WebApi.Data.Migrations.Todo
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("todoTaskId")
+                    b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -163,16 +171,58 @@ namespace WebApi.Data.Migrations.Todo
 
                     b.HasKey("Id");
 
-                    b.HasIndex("todoTaskId");
+                    b.HasIndex("TodoTaskId")
+                        .IsUnique();
 
                     b.ToTable("TaskPages");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TagToTask", b =>
+                {
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TaskTag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TaskTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TodoTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TaskComment", b =>
+                {
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TodoTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTask", b =>
+                {
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoList", "TodoList")
+                        .WithMany()
+                        .HasForeignKey("TodoListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TodoList");
                 });
 
             modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTaskPage", b =>
                 {
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
-                        .WithMany()
-                        .HasForeignKey("todoTaskId")
+                        .WithOne()
+                        .HasForeignKey("WebApi.Model.Entities.TodoDb.TodoTaskPage", "TodoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,4 +1,4 @@
-namespace WebApi.Model.DTO;
+namespace WebApi.Model.Dto;
 
 public record TaskDto
 {

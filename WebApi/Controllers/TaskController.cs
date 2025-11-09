@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Features.Tasks.AddTag;
 using WebApi.Features.Tasks.CreateTask;
 using WebApi.Features.Tasks.DeleteTask;
+using WebApi.Features.Tasks.GetTags;
 using WebApi.Features.Tasks.GetTaskById;
 using WebApi.Features.Tasks.GetTasks;
 using WebApi.Features.Tasks.RemoveTag;
@@ -52,11 +53,13 @@ public class TaskController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTasks()
+    public async Task<IActionResult> GetTasks([FromQuery] int todoListId)
     {
-        var command = new GetTasksCommand();
+        var command = new GetTasksCommand()
+        {
+            TodoListId = todoListId
+        };
         var tasksDto = await mediator.Send(command);
-
         return this.Ok(tasksDto);
     }
 
@@ -86,5 +89,14 @@ public class TaskController(IMediator mediator) : ControllerBase
         var isDeleted = await mediator.Send(command);
 
         return isDeleted ? this.NoContent() : this.NotFound();
+    }
+
+    [HttpGet("{taskId}/tags")]
+    public async Task<IActionResult> GetTags([FromRoute] int taskId)
+    {
+        var command = new GetTaskTagsCommand() { TaskId = taskId };
+        var tags = await mediator.Send(command);
+
+        return this.Ok(tags);
     }
 }
