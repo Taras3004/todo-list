@@ -1,54 +1,14 @@
 @WebApi_HostAddress = https://localhost:7055
-POST {{WebApi_HostAddress}}/api/auth/login
-Content-Type: application/json
-{
-  "Email": "giganiga@mail.com",
-  "Password": "Password123!"
-}
-###
 
-GET {{WebApi_HostAddress}}/api/TestAuth/Public
-###
-
-GET {{WebApi_HostAddress}}/api/TestAuth/protected
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnaWdhbmlnYUBtYWlsLmNvbSIsImVtYWlsIjoiZ2lnYW5pZ2FAbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijk1ZDQ5MTdmLThhNzctNDI1ZC1hNjc5LWE3Y2JmZWRmMWZlZSIsImp0aSI6ImUzMWYzMjdhLTM3N2QtNGQ2OS1hNTVlLTFmMjhhNDIwZTE2MSIsImV4cCI6MTc2MDM5MDc1NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzA1NSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxODkifQ.XDQNjlFb3kAtnlufzDQONroSiOgxy_hBZSDXnceOGJM
-###
 POST {{WebApi_HostAddress}}/api/task
 Content-Type: application/json
 
 {
-  "Name": "Test",
-  "DeadLine": "2025-01-01",
-  "Description": "123",
-  "TodoList" : 0
+  "Name": "TestTask",
+  "Deadline": "2025-01-01",
+  "Description": "Test description",
+  "TodoListId": 0
 }
-
-###
-
-PUT {{WebApi_HostAddress}}/api/task
-Content-Type: application/json
-
-{
-  "id": 6,
-  "name": "Test222",
-  "deadLine": "2025-01-01T00:00:00",
-  "isCompleted": false,
-  "description": "123",
-  "todoListId": 6
-}
-
-###
-
-GET {{WebApi_HostAddress}}/api/task
-
-###
-
-@id=4
-DELETE {{WebApi_HostAddress}}/api/task?id={{id}}
-
-###
-
-GET {{WebApi_HostAddress}}/api/taskcomment
 
 ###
 
@@ -56,8 +16,12 @@ POST {{WebApi_HostAddress}}/api/taskcomment
 Content-Type: application/json
 
 {
-  "Content": "bbb",
-  "TodoTaskId": "0"
+  "Content": "Comment for task with 8 id",
+  "TodoTaskId": 8
 }
+
+###
+
+DELETE {{WebApi_HostAddress}}/api/task?id=8
 
 ###

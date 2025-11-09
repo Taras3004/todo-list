@@ -6,6 +6,7 @@ using WebApi.Model.UsersDb;
 
 var builder = WebApplication.CreateBuilder(args);
 
+/*
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowWebApp", policy =>
@@ -17,6 +18,7 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+*/
 
 builder.Services.AddJwtTokenServices(builder.Configuration);
 builder.Services.AddControllers();
@@ -44,7 +46,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-builder.Logging.AddFilter("LuckyPennySoftware.MediatR.License", LogLevel.None);
 
 var app = builder.Build();
 
