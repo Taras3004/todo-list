@@ -6,19 +6,18 @@ using WebApi.Model.UsersDb;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
+var clientUrl = builder.Configuration.GetConnectionString("ClientConnection")!;
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowWebApp", policy =>
+    options.AddPolicy("AllowReactClient", policy =>
     {
         policy
-            .WithOrigins(builder.Configuration.GetConnectionString("WebAppConnection")!)
+            .WithOrigins(clientUrl)
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowAnyMethod();
     });
 });
-*/
 
 builder.Services.AddJwtTokenServices(builder.Configuration);
 builder.Services.AddControllers();
@@ -55,6 +54,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowReactClient");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
