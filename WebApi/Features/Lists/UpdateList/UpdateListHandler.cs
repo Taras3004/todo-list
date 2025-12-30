@@ -1,13 +1,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.Dto;
+using WebApi.Model.Dto.Responses;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Lists.UpdateList;
 
-public class UpdateListHandler(TodoListDbContext context) : IRequestHandler<UpdateListCommand, TodoListDto?>
+public class UpdateListHandler(TodoListDbContext context) : IRequestHandler<UpdateListCommand, TodoListResponse?>
 {
-    public async Task<TodoListDto?> Handle(UpdateListCommand request, CancellationToken cancellationToken)
+    public async Task<TodoListResponse?> Handle(UpdateListCommand request, CancellationToken cancellationToken)
     {
         var existingList = await context.Todos
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -22,7 +22,7 @@ public class UpdateListHandler(TodoListDbContext context) : IRequestHandler<Upda
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TodoListDto()
+        return new TodoListResponse()
         {
             Id = existingList.Id,
             Name = existingList.Name,

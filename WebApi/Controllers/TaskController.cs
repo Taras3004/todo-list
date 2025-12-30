@@ -8,6 +8,7 @@ using WebApi.Features.Tasks.GetTaskById;
 using WebApi.Features.Tasks.GetTasks;
 using WebApi.Features.Tasks.RemoveTag;
 using WebApi.Features.Tasks.UpdateTask;
+using WebApi.Model.Dto.Requests.Task;
 
 namespace WebApi.Controllers;
 
@@ -34,9 +35,9 @@ public class TaskController(IMediator mediator) : ControllerBase
     {
         var query = new GetTaskByIdCommand(id);
 
-        var taskDto = await mediator.Send(query);
+        var taskResponse = await mediator.Send(query);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
     }
 
     [HttpPut]
@@ -45,9 +46,9 @@ public class TaskController(IMediator mediator) : ControllerBase
         UpdateTaskCommand command = new UpdateTaskCommand(request.Id, request.Name, request.Deadline,
         request.IsCompleted, request.Description);
 
-        var taskDto = await mediator.Send(command);
+        var taskResponse = await mediator.Send(command);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
     }
 
     [HttpDelete("{id}")]
@@ -67,8 +68,8 @@ public class TaskController(IMediator mediator) : ControllerBase
         {
             TodoListId = todoListId
         };
-        var tasksDto = await mediator.Send(command);
-        return this.Ok(tasksDto);
+        var taskResponse = await mediator.Send(command);
+        return this.Ok(taskResponse);
     }
 
     [HttpPost("{taskId}/tags")]

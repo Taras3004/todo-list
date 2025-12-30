@@ -5,6 +5,7 @@ using WebApi.Features.Tags.DeleteTag;
 using WebApi.Features.Tags.GetTagById;
 using WebApi.Features.Tags.GetTags;
 using WebApi.Features.Tags.UpdateTag;
+using WebApi.Model.Dto.Requests.TaskTag;
 
 namespace WebApi.Controllers;
 
@@ -17,9 +18,9 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     {
         CreateTaskTagCommand command = new CreateTaskTagCommand(request.Tag);
 
-        var taskDto = await mediator.Send(command);
+        var taskTagResponse = await mediator.Send(command);
 
-        return this.CreatedAtAction(nameof(this.GetTask), new { id = taskDto.Id }, taskDto);
+        return this.Ok(taskTagResponse);
     }
 
     [HttpGet("{id}")]
@@ -27,9 +28,9 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     {
         var query = new GetTaskTagByIdCommand(id);
 
-        var taskDto = await mediator.Send(query);
+        var taskTagResponse = await mediator.Send(query);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskTagResponse == null ? this.NotFound() : this.Ok(taskTagResponse);
     }
 
     [HttpPut]
@@ -37,9 +38,9 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     {
         UpdateTaskTagCommand command = new UpdateTaskTagCommand(request.Id, request.Tag);
 
-        var taskDto = await mediator.Send(command);
+        var taskTagResponse = await mediator.Send(command);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskTagResponse == null ? this.NotFound() : this.Ok(taskTagResponse);
     }
 
     [HttpDelete("{id}")]
@@ -56,8 +57,8 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetTasks()
     {
         var command = new GetTaskTagsCommand();
-        var tasksDto = await mediator.Send(command);
+        var taskTagsResponse = await mediator.Send(command);
 
-        return this.Ok(tasksDto);
+        return this.Ok(taskTagsResponse);
     }
 }

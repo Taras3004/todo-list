@@ -1,13 +1,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.Dto;
+using WebApi.Model.Dto.Responses;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Lists.GetListById;
 
-public class GetListByIdHandler(TodoListDbContext context) : IRequestHandler<GetListByIdCommand, TodoListDto?>
+public class GetListByIdHandler(TodoListDbContext context) : IRequestHandler<GetListByIdCommand, TodoListResponse?>
 {
-    public async Task<TodoListDto?> Handle(GetListByIdCommand request, CancellationToken cancellationToken)
+    public async Task<TodoListResponse?> Handle(GetListByIdCommand request, CancellationToken cancellationToken)
     {
         var list = await context.Todos.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
@@ -16,7 +16,7 @@ public class GetListByIdHandler(TodoListDbContext context) : IRequestHandler<Get
             return null;
         }
 
-        return new TodoListDto()
+        return new TodoListResponse()
         {
             Id = list.Id,
             Name = list.Name,

@@ -1,6 +1,8 @@
+namespace WebApi.Model.Dto.Requests.Task;
+
 public record UpdateTaskRequest
 {
-    public int Id { get; init; }
+    public required int Id { get; init; }
 
     public required string Name { get; init; }
 

@@ -1,6 +1,6 @@
 using MediatR;
-using WebApi.Model.Dto;
+using WebApi.Model.Dto.Responses;
 
 namespace WebApi.Features.Lists.GetLists;
 
-public class GetListsCommand : IRequest<List<TodoListDto>>;
+public class GetListsCommand : IRequest<List<TodoListResponse>>;

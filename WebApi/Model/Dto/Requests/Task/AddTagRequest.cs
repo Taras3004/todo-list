@@ -1,4 +1,6 @@
+namespace WebApi.Model.Dto.Requests.Task;
+
 public record AddTagToTaskRequest
 {
-    public int TagId { get; init; }
+    public required int TagId { get; init; }
 }

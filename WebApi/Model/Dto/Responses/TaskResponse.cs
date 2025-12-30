@@ -1,8 +1,10 @@
+namespace WebApi.Model.Dto.Responses;
+
 public record TaskResponse
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
 
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     public DateTime Deadline { get; set; }
 
@@ -10,5 +12,5 @@ public record TaskResponse
 
     public string? Description { get; set; }
 
-    public int TodoListId { get; set; }
+    public required int TodoListId { get; set; }
 }

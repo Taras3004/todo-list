@@ -1,4 +1,5 @@
 using MediatR;
+using WebApi.Model.Dto.Responses;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.CreateTag;
@@ -10,6 +11,7 @@ public class CreateTaskTagHandler(TodoListDbContext context) : IRequestHandler<C
         TaskTag tag = new TaskTag()
         {
             Tag = request.Tag,
+            UserId = "13213",
         };
 
         await context.TaskTags.AddAsync(tag, cancellationToken);

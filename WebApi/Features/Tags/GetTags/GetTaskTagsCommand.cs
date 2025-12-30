@@ -1,4 +1,5 @@
 using MediatR;
+using WebApi.Model.Dto.Responses;
 
 namespace WebApi.Features.Tags.GetTags;
 

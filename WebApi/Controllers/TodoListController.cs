@@ -5,6 +5,7 @@ using WebApi.Features.Lists.DeleteList;
 using WebApi.Features.Lists.GetListById;
 using WebApi.Features.Lists.GetLists;
 using WebApi.Features.Lists.UpdateList;
+using WebApi.Model.Dto.Requests.List;
 
 namespace WebApi.Controllers;
 
@@ -19,9 +20,9 @@ public class TodoListController(IMediator mediator) : ControllerBase
             request.Name,
             request.Description);
 
-        var taskResponse = await mediator.Send(command);
+        var todoListResponse = await mediator.Send(command);
 
-        return this.Ok(taskResponse);
+        return this.Ok(todoListResponse);
     }
 
     [HttpGet("{id}")]
@@ -29,9 +30,9 @@ public class TodoListController(IMediator mediator) : ControllerBase
     {
         var query = new GetListByIdCommand(id);
 
-        var taskResponse = await mediator.Send(query);
+        var todoListResponse = await mediator.Send(query);
 
-        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
+        return todoListResponse == null ? this.NotFound() : this.Ok(todoListResponse);
     }
 
     [HttpPut]
@@ -39,9 +40,9 @@ public class TodoListController(IMediator mediator) : ControllerBase
     {
         UpdateListCommand command = new UpdateListCommand(request.Id, request.Name, request.Description);
 
-        var taskResponse = await mediator.Send(command);
+        var todoListResponse = await mediator.Send(command);
 
-        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
+        return todoListResponse == null ? this.NotFound() : this.Ok(todoListResponse);
     }
 
     [HttpDelete("{id}")]
@@ -58,8 +59,8 @@ public class TodoListController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetLists()
     {
         var command = new GetListsCommand();
-        var tasksDto = await mediator.Send(command);
+        var todoListsResponse = await mediator.Send(command);
 
-        return this.Ok(tasksDto);
+        return this.Ok(todoListsResponse);
     }
 }

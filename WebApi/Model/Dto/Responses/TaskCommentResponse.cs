@@ -1,8 +1,10 @@
 
+namespace WebApi.Model.Dto.Responses;
+
 public record TaskCommentResponse
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
     public required string Content { get; set; }
-    public DateTime Created { get; set; }
-    public int TodoTaskId { get; set; }
+    public required DateTime Created { get; set; }
+    public required int TodoTaskId { get; set; }
 }

@@ -1,24 +1,25 @@
 using MediatR;
-using WebApi.Model.Dto;
+using WebApi.Model.Dto.Responses;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Lists.CreateList;
 
-public class CreateListHandler(TodoListDbContext context) : IRequestHandler<CreateListCommand, TodoListDto>
+public class CreateListHandler(TodoListDbContext context) : IRequestHandler<CreateListCommand, TodoListResponse>
 {
-    public async Task<TodoListDto> Handle(CreateListCommand request, CancellationToken cancellationToken)
+    public async Task<TodoListResponse> Handle(CreateListCommand request, CancellationToken cancellationToken)
     {
         TodoList todoList = new TodoList()
         {
             Name = request.Name,
             Description = request.Description,
+            UserId = "1231321"
         };
 
         await context.Todos.AddAsync(todoList, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TodoListDto()
+        return new TodoListResponse()
         {
             Id = todoList.Id,
             Name = todoList.Name,

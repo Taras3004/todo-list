@@ -4,6 +4,7 @@ using WebApi.Features.Comments.CreateComment;
 using WebApi.Features.Comments.DeleteComment;
 using WebApi.Features.Comments.GetCommentById;
 using WebApi.Features.Comments.GetComments;
+using WebApi.Model.Dto.Requests.TaskComment;
 
 namespace WebApi.Controllers;
 
@@ -16,9 +17,9 @@ public class TaskCommentController(IMediator mediator) : ControllerBase
     {
         CreateTaskCommentCommand command = new CreateTaskCommentCommand(request.Content, request.TodoTaskId);
 
-        var taskDto = await mediator.Send(command);
+        var taskCommentResponse = await mediator.Send(command);
 
-        return this.Ok(taskDto);
+        return this.Ok(taskCommentResponse);
     }
 
     [HttpGet("{id}")]
@@ -26,9 +27,9 @@ public class TaskCommentController(IMediator mediator) : ControllerBase
     {
         var query = new GetTaskCommentByIdCommand(id);
 
-        var taskResponse = await mediator.Send(query);
+        var taskCommentResponse = await mediator.Send(query);
 
-        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
+        return taskCommentResponse == null ? this.NotFound() : this.Ok(taskCommentResponse);
     }
 
     [HttpDelete("{id}")]
@@ -45,8 +46,8 @@ public class TaskCommentController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetComments()
     {
         var command = new GetCommentsCommand();
-        var tasksDto = await mediator.Send(command);
+        var taskCommentsResponse = await mediator.Send(command);
 
-        return this.Ok(tasksDto);
+        return this.Ok(taskCommentsResponse);
     }
 }

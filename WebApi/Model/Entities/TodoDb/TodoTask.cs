@@ -9,7 +9,7 @@ public class TodoTask : BaseEntity
     public int TodoListId { get; set; }
 
     [StringLength(80)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     public DateTime Deadline { get; set; }
 

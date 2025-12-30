@@ -4,7 +4,7 @@ namespace WebApi.Model.Entities.TodoDb;
 
 public class TaskComment : BaseEntity
 {
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     public DateTime Created { get; set; }
 
