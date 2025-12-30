@@ -10,7 +10,7 @@ namespace WebApi.Controllers
         [HttpGet("public")]
         public IActionResult Public()
         {
-            return this.Ok("Public endpoint: доступ без токена");
+            return this.Ok("Public endpoint:");
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

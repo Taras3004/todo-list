@@ -1,11 +1,10 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Lists.UpdateList;
 
-public class UpdateListCommand : IRequest<TodoListDto?>
+public class UpdateListCommand(int id, string name, string? description) : IRequest<TodoListResponse?>
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public int Id { get; } = id;
+    public string Name { get; } = name;
+    public string? Description { get; } = description;
 }

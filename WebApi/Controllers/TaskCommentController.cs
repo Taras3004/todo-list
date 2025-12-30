@@ -12,27 +12,29 @@ namespace WebApi.Controllers;
 public class TaskCommentController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateCommentCommand command)
+    public async Task<IActionResult> CreateComment([FromBody] CreateTaskCommentRequest request)
     {
+        CreateTaskCommentCommand command = new CreateTaskCommentCommand(request.Content, request.TodoTaskId);
+
         var taskDto = await mediator.Send(command);
 
-        return this.CreatedAtAction(nameof(this.GetTask), new { id = taskDto.Id }, taskDto);
+        return this.Ok(taskDto);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetTask(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetComment([FromRoute] int id)
     {
-        var query = new GetCommentByIdCommand(id);
+        var query = new GetTaskCommentByIdCommand(id);
 
-        var taskDto = await mediator.Send(query);
+        var taskResponse = await mediator.Send(query);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteTask(int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteComment([FromRoute] int id)
     {
-        var command = new DeleteCommentCommand(id);
+        var command = new DeleteTaskCommentCommand(id);
 
         var isDeleted = await mediator.Send(command);
 
@@ -40,7 +42,7 @@ public class TaskCommentController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTasks()
+    public async Task<IActionResult> GetComments()
     {
         var command = new GetCommentsCommand();
         var tasksDto = await mediator.Send(command);

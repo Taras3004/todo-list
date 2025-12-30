@@ -1,12 +1,11 @@
 using MediatR;
-using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.CreateTask;
 
-public class CreateTaskHandler(TodoListDbContext context) : IRequestHandler<CreateTaskCommand, TaskDto>
+public class CreateTaskHandler(TodoListDbContext context) : IRequestHandler<CreateTaskCommand, TaskResponse>
 {
-    public async Task<TaskDto> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<TaskResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         var task = new TodoTask()
         {
@@ -27,7 +26,7 @@ public class CreateTaskHandler(TodoListDbContext context) : IRequestHandler<Crea
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TaskDto()
+        return new TaskResponse()
         {
             Id = task.Id,
             Name = task.Name,

@@ -1,10 +1,9 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Tasks.UpdateTask;
 
 public class UpdateTaskCommand(int id, string name, DateTime deadline, bool isCompleted, string? description)
-    : IRequest<TaskDto?>
+    : IRequest<TaskResponse?>
 {
     public int Id { get; } = id;
     public string Name { get; } = name;

@@ -13,33 +13,39 @@ namespace WebApi.Controllers;
 public class TodoListController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateListCommand command)
+    public async Task<IActionResult> CreateList([FromBody] CreateListRequest request)
     {
-        var taskDto = await mediator.Send(command);
+        CreateListCommand command = new CreateListCommand(
+            request.Name,
+            request.Description);
 
-        return this.CreatedAtAction(nameof(this.GetTask), new { id = taskDto.Id }, taskDto);
+        var taskResponse = await mediator.Send(command);
+
+        return this.Ok(taskResponse);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetTask(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetList([FromRoute] int id)
     {
         var query = new GetListByIdCommand(id);
 
-        var taskDto = await mediator.Send(query);
+        var taskResponse = await mediator.Send(query);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateTask([FromBody] UpdateListCommand command)
+    public async Task<IActionResult> UpdateList([FromBody] UpdateListRequest request)
     {
-        var taskDto = await mediator.Send(command);
+        UpdateListCommand command = new UpdateListCommand(request.Id, request.Name, request.Description);
 
-        return taskDto == null ? this.NotFound() : this.Ok(taskDto);
+        var taskResponse = await mediator.Send(command);
+
+        return taskResponse == null ? this.NotFound() : this.Ok(taskResponse);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteTask(int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteList(int id)
     {
         var command = new DeleteListCommand(id);
 
@@ -49,7 +55,7 @@ public class TodoListController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTasks()
+    public async Task<IActionResult> GetLists()
     {
         var command = new GetListsCommand();
         var tasksDto = await mediator.Send(command);

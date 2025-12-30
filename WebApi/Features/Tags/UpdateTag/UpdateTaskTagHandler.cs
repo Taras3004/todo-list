@@ -1,13 +1,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.UpdateTag;
 
-public class UpdateTagHandler(TodoListDbContext context) : IRequestHandler<UpdateTagCommand, TaskTagDto?>
+public class UpdateTaskTagHandler(TodoListDbContext context) : IRequestHandler<UpdateTaskTagCommand, TaskTagResponse?>
 {
-    public async Task<TaskTagDto?> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
+    public async Task<TaskTagResponse?> Handle(UpdateTaskTagCommand request, CancellationToken cancellationToken)
     {
         var existingTag = await context.TaskTags
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -17,11 +16,11 @@ public class UpdateTagHandler(TodoListDbContext context) : IRequestHandler<Updat
             return null;
         }
 
-        existingTag.Tag = request.Tag; 
+        existingTag.Tag = request.Tag;
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TaskTagDto()
+        return new TaskTagResponse()
         {
             Id = existingTag.Id,
             Tag = existingTag.Tag,

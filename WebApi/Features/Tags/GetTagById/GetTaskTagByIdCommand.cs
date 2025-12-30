@@ -1,9 +1,8 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Tags.GetTagById;
 
-public class GetTagByIdCommand(int id) : IRequest<TaskTagDto?>
+public class GetTaskTagByIdCommand(int id) : IRequest<TaskTagResponse?>
 {
     public int Id { get; } = id;
 }

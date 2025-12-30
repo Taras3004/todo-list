@@ -4,9 +4,9 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.DeleteTag;
 
-public class DeleteTagHandler(TodoListDbContext context) : IRequestHandler<DeleteTagCommand, bool>
+public class DeleteTaskTagHandler(TodoListDbContext context) : IRequestHandler<DeleteTaskTagCommand, bool>
 {
-    public async Task<bool> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(DeleteTaskTagCommand request, CancellationToken cancellationToken)
     {
         var tag = await context.TaskTags.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 

@@ -13,17 +13,19 @@ namespace WebApi.Controllers;
 public class TaskTagController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateTagCommand command)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskTagRequest request)
     {
+        CreateTaskTagCommand command = new CreateTaskTagCommand(request.Tag);
+
         var taskDto = await mediator.Send(command);
 
         return this.CreatedAtAction(nameof(this.GetTask), new { id = taskDto.Id }, taskDto);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetTask(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTask([FromRoute] int id)
     {
-        var query = new GetTagByIdCommand(id);
+        var query = new GetTaskTagByIdCommand(id);
 
         var taskDto = await mediator.Send(query);
 
@@ -31,17 +33,19 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateTask([FromBody] UpdateTagCommand command)
+    public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskTagRequest request)
     {
+        UpdateTaskTagCommand command = new UpdateTaskTagCommand(request.Id, request.Tag);
+
         var taskDto = await mediator.Send(command);
 
         return taskDto == null ? this.NotFound() : this.Ok(taskDto);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteTask(int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask([FromRoute] int id)
     {
-        var command = new DeleteTagCommand(id);
+        var command = new DeleteTaskTagCommand(id);
 
         var isDeleted = await mediator.Send(command);
 
@@ -51,7 +55,7 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetTasks()
     {
-        var command = new GetTagsCommand();
+        var command = new GetTaskTagsCommand();
         var tasksDto = await mediator.Send(command);
 
         return this.Ok(tasksDto);

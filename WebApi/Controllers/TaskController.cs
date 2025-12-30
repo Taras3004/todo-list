@@ -8,7 +8,6 @@ using WebApi.Features.Tasks.GetTaskById;
 using WebApi.Features.Tasks.GetTasks;
 using WebApi.Features.Tasks.RemoveTag;
 using WebApi.Features.Tasks.UpdateTask;
-using WebApi.Model.Dto;
 
 namespace WebApi.Controllers;
 
@@ -17,15 +16,21 @@ namespace WebApi.Controllers;
 public class TaskController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateTaskCommand command)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
     {
-        var taskDto = await mediator.Send(command);
+        CreateTaskCommand command = new CreateTaskCommand(
+            request.Name,
+            DateTime.UtcNow,
+            request.Description,
+            request.TodoListId
+        );
+        var taskResponse = await mediator.Send(command);
 
-        return this.CreatedAtAction(nameof(this.GetTask), new { id = taskDto.Id }, taskDto);
+        return this.Ok(taskResponse);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetTask(int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTask([FromRoute] int id)
     {
         var query = new GetTaskByIdCommand(id);
 
@@ -35,15 +40,18 @@ public class TaskController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskCommand command)
+    public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskRequest request)
     {
+        UpdateTaskCommand command = new UpdateTaskCommand(request.Id, request.Name, request.Deadline,
+        request.IsCompleted, request.Description);
+
         var taskDto = await mediator.Send(command);
 
         return taskDto == null ? this.NotFound() : this.Ok(taskDto);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteTask(int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask([FromRoute] int id)
     {
         var command = new DeleteTaskByIdCommand(id);
 
@@ -64,11 +72,11 @@ public class TaskController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("{taskId}/tags")]
-    public async Task<IActionResult> AddTag([FromRoute] int taskId, [FromBody] AddTagToTaskDto body)
+    public async Task<IActionResult> AddTag([FromRoute] int taskId, [FromBody] AddTagToTaskRequest request)
     {
         var command = new AddTagToTaskCommand()
         {
-            TagId = body.TagId,
+            TagId = request.TagId,
             TaskId = taskId,
         };
 

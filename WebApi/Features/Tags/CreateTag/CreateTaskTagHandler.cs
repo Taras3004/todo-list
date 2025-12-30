@@ -1,12 +1,11 @@
 using MediatR;
-using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.CreateTag;
 
-public class CreateTagHandler(TodoListDbContext context) : IRequestHandler<CreateTagCommand, TaskTagDto>
+public class CreateTaskTagHandler(TodoListDbContext context) : IRequestHandler<CreateTaskTagCommand, TaskTagResponse>
 {
-    public async Task<TaskTagDto> Handle(CreateTagCommand request, CancellationToken cancellationToken)
+    public async Task<TaskTagResponse> Handle(CreateTaskTagCommand request, CancellationToken cancellationToken)
     {
         TaskTag tag = new TaskTag()
         {
@@ -17,7 +16,7 @@ public class CreateTagHandler(TodoListDbContext context) : IRequestHandler<Creat
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TaskTagDto()
+        return new TaskTagResponse()
         {
             Id = tag.Id,
             Tag = tag.Tag,

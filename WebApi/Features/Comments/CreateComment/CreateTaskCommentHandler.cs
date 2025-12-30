@@ -1,12 +1,11 @@
 using MediatR;
-using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Comments.CreateComment;
 
-public class CreateCommentHandler(TodoListDbContext context) : IRequestHandler<CreateCommentCommand, TaskCommentDto>
+public class CreateTaskCommentHandler(TodoListDbContext context) : IRequestHandler<CreateTaskCommentCommand, TaskCommentResponse>
 {
-    public async Task<TaskCommentDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+    public async Task<TaskCommentResponse> Handle(CreateTaskCommentCommand request, CancellationToken cancellationToken)
     {
         TaskComment taskComment = new TaskComment()
         {
@@ -19,7 +18,7 @@ public class CreateCommentHandler(TodoListDbContext context) : IRequestHandler<C
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TaskCommentDto()
+        return new TaskCommentResponse()
         {
             Id = taskComment.Id,
             Content = taskComment.Content,

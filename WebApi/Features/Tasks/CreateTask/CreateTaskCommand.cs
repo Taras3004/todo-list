@@ -1,9 +1,8 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Tasks.CreateTask;
 
-public class CreateTaskCommand(string name, DateTime deadline, string? description, int todoListId) : IRequest<TaskDto>
+public class CreateTaskCommand(string name, DateTime deadline, string? description, int todoListId) : IRequest<TaskResponse>
 {
     public string Name { get; } = name;
     public DateTime Deadline { get; } = deadline;

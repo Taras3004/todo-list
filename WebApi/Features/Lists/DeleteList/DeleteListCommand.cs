@@ -1,5 +1,4 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Lists.DeleteList;
 

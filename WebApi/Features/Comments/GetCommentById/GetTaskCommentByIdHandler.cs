@@ -1,13 +1,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.Dto;
 using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Comments.GetCommentById;
 
-public class GetCommentByIdHandler(TodoListDbContext context) : IRequestHandler<GetCommentByIdCommand, TaskCommentDto?>
+public class GetTaskCommentByIdHandler(TodoListDbContext context) : IRequestHandler<GetTaskCommentByIdCommand, TaskCommentResponse?>
 {
-    public async Task<TaskCommentDto?> Handle(GetCommentByIdCommand request, CancellationToken cancellationToken)
+    public async Task<TaskCommentResponse?> Handle(GetTaskCommentByIdCommand request, CancellationToken cancellationToken)
     {
         var comment = await context.TaskComments.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
@@ -16,7 +15,7 @@ public class GetCommentByIdHandler(TodoListDbContext context) : IRequestHandler<
             return null;
         }
 
-        return new TaskCommentDto()
+        return new TaskCommentResponse()
         {
             Id = comment.Id,
             Content = comment.Content,

@@ -1,9 +1,8 @@
 using MediatR;
-using WebApi.Model.Dto;
 
 namespace WebApi.Features.Comments.GetCommentById;
 
-public class GetCommentByIdCommand(int id) : IRequest<TaskCommentDto?>
+public class GetTaskCommentByIdCommand(int id) : IRequest<TaskCommentResponse?>
 {
     public int Id { get; } = id;
 }

@@ -2,5 +2,5 @@ namespace WebApi.Model.Entities.TodoDb;
 
 public interface IUserOwnedEntity
 {
-    string UserId { get; set; }
+    public string UserId { get; set; }
 }
