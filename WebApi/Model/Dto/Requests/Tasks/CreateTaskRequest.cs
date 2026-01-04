@@ -1,4 +1,4 @@
-namespace WebApi.Model.Dto.Requests.Task;
+namespace WebApi.Model.Dto.Requests.Tasks;
 
 public record CreateTaskRequest
 {

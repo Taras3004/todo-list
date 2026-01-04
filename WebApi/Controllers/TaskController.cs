@@ -8,7 +8,7 @@ using WebApi.Features.Tasks.GetTaskById;
 using WebApi.Features.Tasks.GetTasks;
 using WebApi.Features.Tasks.RemoveTag;
 using WebApi.Features.Tasks.UpdateTask;
-using WebApi.Model.Dto.Requests.Task;
+using WebApi.Model.Dto.Requests.Tasks;
 
 namespace WebApi.Controllers;
 

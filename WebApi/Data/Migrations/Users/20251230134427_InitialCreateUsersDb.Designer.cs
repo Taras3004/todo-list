@@ -12,8 +12,8 @@ using WebApi.Model.Entities.UsersDb;
 namespace WebApi.Data.Migrations.Users
 {
     [DbContext(typeof(UsersDbContext))]
-    [Migration("20251104143343_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251230134427_InitialCreateUsersDb")]
+    partial class InitialCreateUsersDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

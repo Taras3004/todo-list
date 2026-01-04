@@ -5,7 +5,7 @@ using WebApi.Features.Lists.DeleteList;
 using WebApi.Features.Lists.GetListById;
 using WebApi.Features.Lists.GetLists;
 using WebApi.Features.Lists.UpdateList;
-using WebApi.Model.Dto.Requests.List;
+using WebApi.Model.Dto.Requests.Lists;
 
 namespace WebApi.Controllers;
 

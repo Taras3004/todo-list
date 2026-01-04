@@ -12,8 +12,8 @@ using WebApi.Model.Entities.TodoDb;
 namespace WebApi.Data.Migrations.Todo
 {
     [DbContext(typeof(TodoListDbContext))]
-    [Migration("20251109131421_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251230134410_InitialCreateTodoDb")]
+    partial class InitialCreateTodoDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,7 +83,8 @@ namespace WebApi.Data.Migrations.Todo
 
                     b.Property<string>("Tag")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -103,7 +104,6 @@ namespace WebApi.Data.Migrations.Todo
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 

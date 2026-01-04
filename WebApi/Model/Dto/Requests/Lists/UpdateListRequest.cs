@@ -1,4 +1,4 @@
-namespace WebApi.Model.Dto.Requests.List;
+namespace WebApi.Model.Dto.Requests.Lists;
 
 public record UpdateListRequest
 {

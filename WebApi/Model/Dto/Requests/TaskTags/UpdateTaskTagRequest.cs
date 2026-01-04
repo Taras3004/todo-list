@@ -1,4 +1,4 @@
-namespace WebApi.Model.Dto.Requests.TaskTag;
+namespace WebApi.Model.Dto.Requests.TaskTags;
 
 public record UpdateTaskTagRequest
 {

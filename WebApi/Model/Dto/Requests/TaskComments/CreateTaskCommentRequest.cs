@@ -1,4 +1,4 @@
-namespace WebApi.Model.Dto.Requests.TaskComment;
+namespace WebApi.Model.Dto.Requests.TaskComments;
 
 public record CreateTaskCommentRequest
 {

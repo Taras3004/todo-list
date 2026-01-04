@@ -4,7 +4,7 @@ using WebApi.Features.Comments.CreateComment;
 using WebApi.Features.Comments.DeleteComment;
 using WebApi.Features.Comments.GetCommentById;
 using WebApi.Features.Comments.GetComments;
-using WebApi.Model.Dto.Requests.TaskComment;
+using WebApi.Model.Dto.Requests.TaskComments;
 
 namespace WebApi.Controllers;
 

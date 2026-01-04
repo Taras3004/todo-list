@@ -5,7 +5,7 @@ using WebApi.Features.Tags.DeleteTag;
 using WebApi.Features.Tags.GetTagById;
 using WebApi.Features.Tags.GetTags;
 using WebApi.Features.Tags.UpdateTag;
-using WebApi.Model.Dto.Requests.TaskTag;
+using WebApi.Model.Dto.Requests.TaskTags;
 
 namespace WebApi.Controllers;
 
