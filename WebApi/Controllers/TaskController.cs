@@ -21,7 +21,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     {
         CreateTaskCommand command = new CreateTaskCommand(
             request.Name,
-            DateTime.UtcNow,
+            DateTime.Today.AddDays(2).AddSeconds(-1),
             request.Description,
             request.TodoListId
         );

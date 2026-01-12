@@ -1,22 +1,48 @@
 import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
-import { Button } from "../Components/Button";
-import { Menu } from "lucide-react";
-import { LogOut } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
+import { Button } from "../components/Button";
+import { TagPopup } from "../components/TagPopup";
+import { ThemeSwitcher } from "../components/ThemeSwitcher";
+import { SearchBar } from "../components/SearchBar";
 
 export const MainLayout = () => {
   const [isMenuOpen, ToggleMenu] = useState(true);
-  const lists = ["list 1", "list 2", "list 3", "list 4", "list 1"];
+
+  const initialLists = [
+    { id: 1, name: "list 1" },
+    { id: 2, name: "list 2" },
+    { id: 3, name: "list 3" },
+    { id: 4, name: "list 4" },
+    { id: 5, name: "list 1" },
+  ];
+
+  const [lists, setLists] = useState(initialLists);
+  const [newList, setNewList] = useState("");
+
+  const newListID: number = 6; // temp
+  const HandleListCreation = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (newList.trim() === "") return;
+    setLists([...lists, { id: newListID, name: newList }]);
+    setNewList("");
+  };
 
   return (
     <div className="flex-col">
-      <nav className="flex items-center p-4 gap-5 bg-gray-200">
+      <nav className="flex items-center p-4 gap-5 bg-primary">
         <button onClick={() => ToggleMenu(!isMenuOpen)}>
-          <Menu />
+          <Menu
+            className={`${
+              isMenuOpen ? "rotate-180" : "rotate-90"
+            } transition-all duration-300 ease-in-out`}
+          />
         </button>
-        <Link to="/tasks">Tasks</Link>
-        <Link to="/taskTags">Tags</Link>
-        <Link to="/login" className="ml-auto">
+        <TagPopup />
+        <SearchBar />
+        <ThemeSwitcher className="ml-auto" />
+        <Link to="/login">
           <LogOut />
         </Link>
       </nav>
@@ -25,19 +51,35 @@ export const MainLayout = () => {
         <div
           className={`${
             isMenuOpen ? "w-2xs" : "w-0"
-          } bg-gray-400 rounded-2xl overflow-hidden whitespace-nowrap
+          } bg-secondary rounded-br-2xl rounded-tr-2xl overflow-hidden whitespace-nowrap
           transition-all duration-300 ease-in-out`}
         >
           <div className="h-full p-6">
             <h1 className="text-center font-bold text-2xl mb-2">Lists</h1>
             <ul>
               {lists.map((list) => (
-                <li className="">
-                  <Button onClick={() => console.log("clicked on list")}>
-                    {list}
+                <li>
+                  <Button
+                    onClick={() => console.log("clicked on list")}
+                    className="text-center w-full mb-2"
+                  >
+                    {list.name}
                   </Button>
                 </li>
               ))}
+              <li>
+                <Button>
+                  <form onSubmit={HandleListCreation}>
+                    <input
+                      type="text"
+                      placeholder="new list..."
+                      value={newList}
+                      onChange={(e) => setNewList(e.target.value)}
+                      className="w-full outline-none text-center"
+                    ></input>
+                  </form>
+                </Button>
+              </li>
             </ul>
           </div>
         </div>

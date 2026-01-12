@@ -51,6 +51,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    _ = app.UseHsts();
     _ = app.MapOpenApi();
     _ = app.UseSwagger();
     _ = app.UseSwaggerUI();
