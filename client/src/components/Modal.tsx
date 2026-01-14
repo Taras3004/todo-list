@@ -4,9 +4,10 @@ import type React from "react";
 interface ModalProps {
   children: React.ReactNode;
   title?: string;
+  onModalClosed?: () => void;
 }
 
-export const Modal = ({ children, title }: ModalProps) => {
+export const Modal = ({ children, title, onModalClosed }: ModalProps) => {
   const navigate = useNavigate();
 
   const closeModal = () => {
@@ -16,7 +17,10 @@ export const Modal = ({ children, title }: ModalProps) => {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-      onClick={closeModal}
+      onClick={() => {
+        onModalClosed?.();
+        closeModal();
+      }}
     >
       <div
         className="bg-background rounded-default shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-200"

@@ -5,29 +5,13 @@ import { Button } from "../components/Button";
 import { TagPopup } from "../components/TagPopup";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 import { SearchBar } from "../components/SearchBar";
+import { useLists } from "../hooks/useLists";
 
 export const MainLayout = () => {
   const [isMenuOpen, ToggleMenu] = useState(true);
 
-  const initialLists = [
-    { id: 1, name: "list 1" },
-    { id: 2, name: "list 2" },
-    { id: 3, name: "list 3" },
-    { id: 4, name: "list 4" },
-    { id: 5, name: "list 1" },
-  ];
-
-  const [lists, setLists] = useState(initialLists);
   const [newList, setNewList] = useState("");
-
-  const newListID: number = 6; // temp
-  const HandleListCreation = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (newList.trim() === "") return;
-    setLists([...lists, { id: newListID, name: newList }]);
-    setNewList("");
-  };
+  const { lists, isLoading, error, createList, deleteList } = useLists();
 
   return (
     <div className="flex-col">
@@ -69,7 +53,12 @@ export const MainLayout = () => {
               ))}
               <li>
                 <Button>
-                  <form onSubmit={HandleListCreation}>
+                  <form
+                    onSubmit={() => {
+                      createList({ name: newList });
+                      setNewList("");
+                    }}
+                  >
                     <input
                       type="text"
                       placeholder="new list..."

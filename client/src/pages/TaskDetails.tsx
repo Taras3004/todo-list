@@ -1,19 +1,18 @@
-import { Modal } from "./Modal";
+import { Modal } from "../components/Modal";
 import { Tag, X, Calendar } from "lucide-react";
-import { Button } from "./Button";
+import { Button } from "../components/Button";
 import TextareaAutosize from "react-textarea-autosize";
 import { useTaskDetails } from "../hooks/useTaskDetails";
 
 export const TaskDetails = () => {
-  const { task, isLoading, error } = useTaskDetails();
-  const currentTime = new Date();
-  const tags = ["tag 1", "tag 2", "tag 4"];
-  
+  const { task, isLoading, error, updateTaskDetails } = useTaskDetails();
+  const tags = task?.taskTags || [];
+
   if (task === null) return;
 
   const deadlineDate = new Date(task.deadline);
   return (
-    <Modal title={`Task - ${task.name}`}>
+    <Modal title={`Task - ${task.name}`} onModalClosed={() => updateTaskDetails(task)}>
       <div className="pl-6 pr-6 pb-6">
         <div className="mb-4 flex gap-1 items-center justify-start">
           <Calendar />
@@ -28,7 +27,7 @@ export const TaskDetails = () => {
             {tags.map((tag) => (
               <Button>
                 <div className="flex items-center justify-center">
-                  <p>{tag}</p>
+                  <p>{tag.tag}</p>
                   <X className="ml-1 mr-1" size={15} />
                 </div>
               </Button>

@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace WebApi.Data.Migrations.Todo
 {
     /// <inheritdoc />
-    public partial class InitialCreateTodoDb : Migration
+    public partial class InitialTodo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +18,7 @@ namespace WebApi.Data.Migrations.Todo
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Tag = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -68,7 +70,8 @@ namespace WebApi.Data.Migrations.Todo
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TaskTagId = table.Column<int>(type: "int", nullable: false),
-                    TodoTaskId = table.Column<int>(type: "int", nullable: false)
+                    TodoTaskId = table.Column<int>(type: "int", nullable: false),
+                    TodoTaskId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,6 +88,11 @@ namespace WebApi.Data.Migrations.Todo
                         principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TagToTask_Tasks_TodoTaskId1",
+                        column: x => x.TodoTaskId1,
+                        principalTable: "Tasks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +124,8 @@ namespace WebApi.Data.Migrations.Todo
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TodoTaskId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TodoTaskId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -127,6 +136,11 @@ namespace WebApi.Data.Migrations.Todo
                         principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskPages_Tasks_TodoTaskId1",
+                        column: x => x.TodoTaskId1,
+                        principalTable: "Tasks",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -140,6 +154,11 @@ namespace WebApi.Data.Migrations.Todo
                 column: "TodoTaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TagToTask_TodoTaskId1",
+                table: "TagToTask",
+                column: "TodoTaskId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskComments_TodoTaskId",
                 table: "TaskComments",
                 column: "TodoTaskId");
@@ -149,6 +168,13 @@ namespace WebApi.Data.Migrations.Todo
                 table: "TaskPages",
                 column: "TodoTaskId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskPages_TodoTaskId1",
+                table: "TaskPages",
+                column: "TodoTaskId1",
+                unique: true,
+                filter: "[TodoTaskId1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_TodoListId",

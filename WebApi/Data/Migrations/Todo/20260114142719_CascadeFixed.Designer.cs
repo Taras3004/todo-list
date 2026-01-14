@@ -12,8 +12,8 @@ using WebApi.Model.Entities.TodoDb;
 namespace WebApi.Data.Migrations.Todo
 {
     [DbContext(typeof(TodoListDbContext))]
-    [Migration("20251230134410_InitialCreateTodoDb")]
-    partial class InitialCreateTodoDb
+    [Migration("20260114142719_CascadeFixed")]
+    partial class CascadeFixed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,9 @@ namespace WebApi.Data.Migrations.Todo
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tag")
                         .IsRequired()
@@ -186,7 +189,7 @@ namespace WebApi.Data.Migrations.Todo
                         .IsRequired();
 
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
-                        .WithMany()
+                        .WithMany("TagToTasks")
                         .HasForeignKey("TodoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -221,12 +224,20 @@ namespace WebApi.Data.Migrations.Todo
             modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTaskPage", b =>
                 {
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
-                        .WithOne()
+                        .WithOne("TaskPage")
                         .HasForeignKey("WebApi.Model.Entities.TodoDb.TodoTaskPage", "TodoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTask", b =>
+                {
+                    b.Navigation("TagToTasks");
+
+                    b.Navigation("TaskPage")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

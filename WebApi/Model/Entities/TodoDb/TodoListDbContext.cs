@@ -25,7 +25,7 @@ public class TodoListDbContext(DbContextOptions<TodoListDbContext> options) : Db
 
         modelBuilder.Entity<TodoTaskPage>()
             .HasOne(x => x.Task)
-            .WithOne()
+            .WithOne(x => x.TaskPage)
             .HasForeignKey<TodoTaskPage>(x => x.TodoTaskId)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -37,7 +37,7 @@ public class TodoListDbContext(DbContextOptions<TodoListDbContext> options) : Db
 
         modelBuilder.Entity<TagToTask>()
             .HasOne(x => x.Task)
-            .WithMany()
+            .WithMany(x => x.TagToTasks)
             .HasForeignKey(x => x.TodoTaskId)
             .OnDelete(DeleteBehavior.Cascade);
 

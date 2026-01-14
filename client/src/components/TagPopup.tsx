@@ -2,33 +2,17 @@ import { Transition } from "@headlessui/react";
 import { useState } from "react";
 import { Button } from "./Button";
 import { TagContainer } from "./TagContainer";
+import { useTags } from "../hooks/useTags";
 
 export const TagPopup = () => {
-  const initialTags = [
-    { id: 1, name: "tag 1" },
-    { id: 2, name: "tag 2" },
-    { id: 3, name: "tag 3" },
-    { id: 4, name: "tag 4" },
-    { id: 5, name: "tag 1" },
-  ];
-  const [tags, setTags] = useState(initialTags);
+  const { tags, isLoading, error, createTag, deleteTag } = useTags();
   const [createdTag, setCreatedTag] = useState("");
   const [isTagHovered, setTagIsHovered] = useState(false);
-
-  let newID: number = 6;
-  const addTag = (name: string) => {
-    setTags([...tags, { id: newID, name: name }]);
-    newID++;
-  };
-
-  const deleteTag = (id: number) => {
-    setTags(tags.filter((tag) => tag.id != id));
-  };
 
   const HandleTagCreation = (e: React.FormEvent) => {
     e.preventDefault();
     if (createdTag.trim() === "") return;
-    addTag(createdTag);
+    createTag({ tag: createdTag });
     setCreatedTag("");
   };
 
@@ -64,7 +48,7 @@ export const TagPopup = () => {
               {tags.map((tag) => (
                 <TagContainer
                   id={tag.id}
-                  tag={tag.name}
+                  tag={tag.tag}
                   onClick={() => deleteTag(tag.id)}
                 />
               ))}

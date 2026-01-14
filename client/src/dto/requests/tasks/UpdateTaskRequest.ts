@@ -3,5 +3,5 @@ export interface UpdateTaskRequest {
   name: string;
   deadline: Date;
   isCompleted: boolean;
-  description: string;
+  description?: string;
 }

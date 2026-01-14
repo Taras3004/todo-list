@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Model.Entities.TodoDb;
 
@@ -11,9 +12,11 @@ using WebApi.Model.Entities.TodoDb;
 namespace WebApi.Data.Migrations.Todo
 {
     [DbContext(typeof(TodoListDbContext))]
-    partial class TodoListDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260114141144_InitialTodo")]
+    partial class InitialTodo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,11 +39,16 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TodoTaskId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TaskTagId");
 
                     b.HasIndex("TodoTaskId");
+
+                    b.HasIndex("TodoTaskId1");
 
                     b.ToTable("TagToTask");
                 });
@@ -165,6 +173,9 @@ namespace WebApi.Data.Migrations.Todo
                     b.Property<int>("TodoTaskId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TodoTaskId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -173,6 +184,10 @@ namespace WebApi.Data.Migrations.Todo
 
                     b.HasIndex("TodoTaskId")
                         .IsUnique();
+
+                    b.HasIndex("TodoTaskId1")
+                        .IsUnique()
+                        .HasFilter("[TodoTaskId1] IS NOT NULL");
 
                     b.ToTable("TaskPages");
                 });
@@ -186,10 +201,14 @@ namespace WebApi.Data.Migrations.Todo
                         .IsRequired();
 
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
-                        .WithMany("TagToTasks")
+                        .WithMany()
                         .HasForeignKey("TodoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", null)
+                        .WithMany("TagToTasks")
+                        .HasForeignKey("TodoTaskId1");
 
                     b.Navigation("Tag");
 
@@ -221,10 +240,14 @@ namespace WebApi.Data.Migrations.Todo
             modelBuilder.Entity("WebApi.Model.Entities.TodoDb.TodoTaskPage", b =>
                 {
                     b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", "Task")
-                        .WithOne("TaskPage")
+                        .WithOne()
                         .HasForeignKey("WebApi.Model.Entities.TodoDb.TodoTaskPage", "TodoTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WebApi.Model.Entities.TodoDb.TodoTask", null)
+                        .WithOne("TaskPage")
+                        .HasForeignKey("WebApi.Model.Entities.TodoDb.TodoTaskPage", "TodoTaskId1");
 
                     b.Navigation("Task");
                 });

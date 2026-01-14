@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./layouts/MainLayout";
 import { TasksPage } from "./pages/TasksPage";
 import { LoginPage } from "./pages/LoginPage";
-import { TaskDetails } from "./components/TaskDetails";
+import { TaskDetails } from "./pages/TaskDetails";
 
 function App() {
   return (

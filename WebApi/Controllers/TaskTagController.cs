@@ -16,7 +16,7 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTask([FromBody] CreateTaskTagRequest request)
     {
-        CreateTaskTagCommand command = new CreateTaskTagCommand(request.Tag);
+        CreateTaskTagCommand command = new CreateTaskTagCommand(request.Tag, request.Color);
 
         var taskTagResponse = await mediator.Send(command);
 
@@ -36,7 +36,7 @@ public class TaskTagController(IMediator mediator) : ControllerBase
     [HttpPut]
     public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskTagRequest request)
     {
-        UpdateTaskTagCommand command = new UpdateTaskTagCommand(request.Id, request.Tag);
+        UpdateTaskTagCommand command = new UpdateTaskTagCommand(request.Id, request.Tag, request.Color);
 
         var taskTagResponse = await mediator.Send(command);
 

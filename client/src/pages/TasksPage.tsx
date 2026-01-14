@@ -12,7 +12,7 @@ export const TasksPage = () => {
   const navigate = useNavigate();
 
   const [newTask, setNewTask] = useState("");
-  const { tasks, isLoading, error, createTask, deleteTask } = useTasks(2);
+  const { tasks, isLoading, error, createTask, deleteTask } = useTasks(1);
 
   let filteredTasks = tasks;
 
@@ -20,7 +20,7 @@ export const TasksPage = () => {
     e.preventDefault();
 
     if (newTask.trim() === "") return;
-    createTask({ name: newTask, todoListId: 2 });
+    createTask({ name: newTask, todoListId: 1 });
     setNewTask("");
   };
 

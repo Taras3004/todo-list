@@ -5,17 +5,15 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.UpdateTask;
 
-public class UpdateTaskHandler(TodoListDbContext context) : IRequestHandler<UpdateTaskCommand, TaskResponse?>
+public class UpdateTaskHandler(TodoListDbContext context) : IRequestHandler<UpdateTaskCommand, TaskDetailsResponse?>
 {
-    public async Task<TaskResponse?> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<TaskDetailsResponse?> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
         var existingTask = await context.Tasks
+            .Include(task => task.TaskPage)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-        var existingTaskPage = await context.TaskPages
-            .FirstOrDefaultAsync(x => x.TodoTaskId == request.Id, cancellationToken);
-
-        if (existingTask == null || existingTaskPage == null)
+        if (existingTask == null || existingTask.TaskPage == null)
         {
             return null;
         }
@@ -23,18 +21,17 @@ public class UpdateTaskHandler(TodoListDbContext context) : IRequestHandler<Upda
         existingTask.Name = request.Name;
         existingTask.Deadline = request.Deadline;
         existingTask.IsCompleted = request.IsCompleted;
-
-        existingTaskPage.Description = request.Description;
+        existingTask.TaskPage.Description = request.Description;
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TaskResponse()
+        return new TaskDetailsResponse()
         {
             Id = existingTask.Id,
             Name = existingTask.Name,
             Deadline = existingTask.Deadline,
             IsCompleted = existingTask.IsCompleted,
-            Description = existingTaskPage.Description,
+            Description = existingTask.TaskPage.Description,
             TodoListId = existingTask.TodoListId,
         };
     }
