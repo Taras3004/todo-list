@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Model.Dto;
 using WebApi.Model.Dto.Responses;
 using WebApi.Model.Entities.TodoDb;
 
@@ -12,15 +11,14 @@ public class GetTasksHandler(TodoListDbContext context) : IRequestHandler<GetTas
     {
         var tasksDto = context.Tasks
             .Where(task => task.TodoListId == request.TodoListId)
-            .Join(context.TaskPages, task => task.Id, page => page.TodoTaskId, (task, page) => new TaskResponse()
-        {
-            Id = task.Id,
-            Name = task.Name,
-            Deadline = task.Deadline,
-            IsCompleted = task.IsCompleted,
-            Description = page.Description,
-            TodoListId = task.TodoListId,
-        });
+            .Select(task => new TaskResponse
+            {
+                Id = task.Id,
+                Name = task.Name,
+                Deadline = task.Deadline,
+                IsCompleted = task.IsCompleted,
+                TodoListId = task.TodoListId,
+            });
 
         return await tasksDto.ToListAsync(cancellationToken);
     }

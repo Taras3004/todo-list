@@ -16,4 +16,8 @@ public class TodoTask : BaseEntity
     public bool IsCompleted { get; set; }
 
     public TodoList TodoList { get; set; }
+
+    public TodoTaskPage TaskPage { get; set; }
+
+    public ICollection<TagToTask> TagToTasks { get; set; } = [];
 }

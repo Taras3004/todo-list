@@ -5,29 +5,37 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.GetTaskById;
 
-public class GetTaskByIdHandler(TodoListDbContext context) : IRequestHandler<GetTaskByIdCommand, TaskResponse?>
+public class GetTaskByIdHandler(TodoListDbContext context) : IRequestHandler<GetTaskByIdCommand, TaskDetailsResponse?>
 {
-    public async Task<TaskResponse?> Handle(GetTaskByIdCommand request, CancellationToken cancellationToken)
+    public async Task<TaskDetailsResponse?> Handle(GetTaskByIdCommand request, CancellationToken cancellationToken)
     {
         var task = await context.Tasks.AsNoTracking()
+            .Include(x => x.TaskPage)
+            .Include(x => x.TagToTasks)
+                .ThenInclude(x => x.Tag)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-        var taskPage = await context.TaskPages.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.TodoTaskId == task!.Id, cancellationToken);
-
-        if (task == null || taskPage == null)
+        if (task == null || task.TaskPage == null)
         {
             return null;
         }
 
-        return new TaskResponse()
+        var tagsResponse = task.TagToTasks.Select(tagToTask => new TaskTagResponse
+        {
+            Id = tagToTask.Tag.Id,
+            Tag = tagToTask.Tag.Tag,
+            Color = tagToTask.Tag.Color
+        }).ToArray();
+
+        return new TaskDetailsResponse()
         {
             Id = task.Id,
             Name = task.Name,
-            Description = taskPage.Description,
             Deadline = task.Deadline,
             IsCompleted = task.IsCompleted,
+            Description = task.TaskPage.Description,
             TodoListId = task.TodoListId,
+            TaskTags = tagsResponse,
         };
     }
 }

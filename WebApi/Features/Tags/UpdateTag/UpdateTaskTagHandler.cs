@@ -25,6 +25,7 @@ public class UpdateTaskTagHandler(TodoListDbContext context) : IRequestHandler<U
         {
             Id = existingTag.Id,
             Tag = existingTag.Tag,
+            Color = existingTag.Color,
         };
     }
 }

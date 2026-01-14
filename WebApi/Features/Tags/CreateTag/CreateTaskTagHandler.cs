@@ -11,6 +11,7 @@ public class CreateTaskTagHandler(TodoListDbContext context) : IRequestHandler<C
         TaskTag tag = new TaskTag()
         {
             Tag = request.Tag,
+            Color = request.Color,
             UserId = "13213",
         };
 
@@ -21,6 +22,7 @@ public class CreateTaskTagHandler(TodoListDbContext context) : IRequestHandler<C
         return new TaskTagResponse()
         {
             Id = tag.Id,
+            Color = tag.Color,
             Tag = tag.Tag,
         };
     }

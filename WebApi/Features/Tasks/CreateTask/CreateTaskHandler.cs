@@ -32,7 +32,6 @@ public class CreateTaskHandler(TodoListDbContext context) : IRequestHandler<Crea
             Id = task.Id,
             Name = task.Name,
             Deadline = task.Deadline,
-            Description = taskPage.Description,
             IsCompleted = task.IsCompleted,
             TodoListId = task.TodoListId,
         };

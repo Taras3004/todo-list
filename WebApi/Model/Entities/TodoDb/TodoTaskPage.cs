@@ -8,7 +8,7 @@ public class TodoTaskPage : BaseEntity, IUserOwnedEntity
     [ForeignKey(nameof(Task))]
     public int TodoTaskId { get; set; }
 
-    public TodoTask Task { get; set; }
+    public required TodoTask Task { get; set; }
 
     [StringLength(500)]
     public string? Description { get; set; }
