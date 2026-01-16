@@ -1,24 +1,24 @@
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useTaskFilters } from "../hooks/useTaskFilters";
 
 export const SearchBar = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { filters, updateTaskFilter } = useTaskFilters();
 
-  const initialNameParam = searchParams.get("name") || "";
+  const initialNameParam = filters["name"] || "";
   const [nameParam, setNameParam] = useState(initialNameParam);
 
   useEffect(() => {
-    setNameParam(searchParams.get("name") || "");
-  }, [searchParams]);
+    setNameParam(filters["name"] || "");
+  }, [filters["name"]]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (nameParam.trim().length === 0) {
-      setSearchParams({});
+      updateTaskFilter({ name: undefined });
     } else {
-      setSearchParams({ name: nameParam });
+      updateTaskFilter({ name: nameParam });
     }
   };
 

@@ -3,18 +3,18 @@ import { useState } from "react";
 import { Square, SquareCheck, Trash2 } from "lucide-react";
 
 interface TaskBoxProps {
-  isCompleted?: boolean;
   name: string;
   deadline: string | Date;
+  isCompleted?: boolean;
   onClick: () => void;
   onDeleteClicked: (e: React.MouseEvent) => void;
 }
 
 export const TaskBox = ({
-  isCompleted = false,
   name,
   onClick,
   deadline,
+  isCompleted = false,
   onDeleteClicked,
 }: TaskBoxProps) => {
   const [taskCompleted, setTaskCompleted] = useState(isCompleted);
@@ -27,7 +27,7 @@ export const TaskBox = ({
   };
 
   return (
-    <Button onClick={onClick} className="w-full text-left mb-2">
+    <Button onClick={onClick} className="w-full text-left mb-2 shadow">
       <div className="grid grid-cols-[30px_max-content_1fr_30px]">
         <div
           className="text-foreground hover:rotate-12"
@@ -43,7 +43,7 @@ export const TaskBox = ({
           {name}
         </h1>
         <p className="ml-1 text-gray-600">
-          due to {deadlineDate.toLocaleDateString()}
+          due to {deadlineDate.toLocaleString()}
         </p>
         <div onClick={onDeleteClicked}>
           <Trash2 />

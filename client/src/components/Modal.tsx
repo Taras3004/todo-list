@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import type React from "react";
 
 interface ModalProps {
@@ -8,10 +8,11 @@ interface ModalProps {
 }
 
 export const Modal = ({ children, title, onModalClosed }: ModalProps) => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const closeModal = () => {
-    navigate("..", { relative: "path" });
+    navigate(`..?${searchParams.toString()}`, { relative: "path" });
   };
 
   return (

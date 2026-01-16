@@ -11,7 +11,7 @@ export const Button = ({ onClick, children, className }: ButtonProps) => {
     <button
       type="button"
       onClick={onClick}
-      className={`bg-card text-card-foreground rounded-default shadow-2xl p-2
+      className={`bg-card text-card-foreground rounded-default p-2
                  hover:bg-card-highlighted active:bg-card-clicked transition-colors duration-200 ${className}`}
     >
       {children}

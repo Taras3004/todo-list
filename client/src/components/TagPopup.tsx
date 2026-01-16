@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "./Button";
 import { TagContainer } from "./TagContainer";
 import { useTags } from "../hooks/useTags";
+import { CircleLoader } from "./CircleLoader";
 
 export const TagPopup = () => {
   const { tags, isLoading, error, createTag, deleteTag } = useTags();
@@ -33,26 +34,29 @@ export const TagPopup = () => {
       >
         <div className="absolute">
           <div className="bg-background rounded-b-2xl rounded-tr-2xl p-2 shadow-2xl">
-            <div className="flex flex-col overflow-y-auto max-h-50 pr-3.5">
-              <Button className="mb-2">
-                <form onSubmit={HandleTagCreation}>
-                  <input
-                    type="text"
-                    placeholder="create"
-                    value={createdTag}
-                    onChange={(e) => setCreatedTag(e.target.value)}
-                    className="w-20 outline-none text-center"
-                  ></input>
-                </form>
-              </Button>
-              {tags.map((tag) => (
-                <TagContainer
-                  id={tag.id}
-                  tag={tag.tag}
-                  onClick={() => deleteTag(tag.id)}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <CircleLoader />
+            ) : (
+              <div className="flex flex-col overflow-y-auto max-h-50 pr-3.5">
+                <Button className="mb-2">
+                  <form onSubmit={HandleTagCreation}>
+                    <input
+                      type="text"
+                      placeholder="create"
+                      value={createdTag}
+                      onChange={(e) => setCreatedTag(e.target.value)}
+                      className="w-20 outline-none text-center"
+                    ></input>
+                  </form>
+                </Button>
+                {tags.map((tag) => (
+                  <TagContainer
+                    tag={tag.tag}
+                    onClick={() => deleteTag(tag.id)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </Transition>

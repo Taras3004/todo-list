@@ -1,3 +1,3 @@
-export interface AddTagRequest {
+export interface AddTaskTagRequest {
   tagId: number;
 }

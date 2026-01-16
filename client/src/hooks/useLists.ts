@@ -20,18 +20,23 @@ export const useLists = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  const createList = async (data: CreateListRequest) => {
+  const createList = async (
+    data: CreateListRequest
+  ): Promise<TodoListResponse | void> => {
+    let newList: TodoListResponse | null = null;
     try {
-      const newList = await listsApi.create(data);
-      setLists((prev) => [...prev, newList]);
+      newList = await listsApi.create(data);
+      setLists((prev) => [...prev, newList!]);
+      return newList;
     } catch (err) {
       console.error(err);
       alert("Error creating task");
+      return;
     }
   };
 

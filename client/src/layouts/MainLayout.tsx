@@ -1,17 +1,20 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Menu, LogOut } from "lucide-react";
+import { Menu, LogOut, Trash2 } from "lucide-react";
 import { Button } from "../components/Button";
 import { TagPopup } from "../components/TagPopup";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 import { SearchBar } from "../components/SearchBar";
 import { useLists } from "../hooks/useLists";
+import { useTaskFilters } from "../hooks/useTaskFilters";
+import { CircleLoader } from "../components/CircleLoader";
 
 export const MainLayout = () => {
   const [isMenuOpen, ToggleMenu] = useState(true);
-
   const [newList, setNewList] = useState("");
   const { lists, isLoading, error, createList, deleteList } = useLists();
+  const { filters, resetFilters, updateTaskFilter } = useTaskFilters();
+  const navigate = useNavigate();
 
   return (
     <div className="flex-col">
@@ -40,36 +43,58 @@ export const MainLayout = () => {
         >
           <div className="h-full p-6">
             <h1 className="text-center font-bold text-2xl mb-2">Lists</h1>
-            <ul>
-              {lists.map((list) => (
+            {isLoading ? (
+              <CircleLoader />
+            ) : (
+              <ul>
+                {lists.map((list) => (
+                  <li>
+                    <Button
+                      onClick={() => {
+                        resetFilters();
+                        updateTaskFilter({ todoListId: list.id });
+                      }}
+                      className="text-center w-full mb-2 flex justify-between"
+                    >
+                      <p className="truncate">{list.name}</p>
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteList(list.id);
+                          if (filters["todoListId"] === list.id) {
+                            updateTaskFilter({ todoListId: undefined });
+                            navigate("/tasks");
+                          }
+                        }}
+                      >
+                        <Trash2 />
+                      </div>
+                    </Button>
+                  </li>
+                ))}
                 <li>
-                  <Button
-                    onClick={() => console.log("clicked on list")}
-                    className="text-center w-full mb-2"
-                  >
-                    {list.name}
+                  <Button>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        createList({ name: newList });
+                        setNewList("");
+                      }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="new list..."
+                        value={newList}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setNewList(e.target.value);
+                        }}
+                        className="w-full outline-none text-center"
+                      ></input>
+                    </form>
                   </Button>
                 </li>
-              ))}
-              <li>
-                <Button>
-                  <form
-                    onSubmit={() => {
-                      createList({ name: newList });
-                      setNewList("");
-                    }}
-                  >
-                    <input
-                      type="text"
-                      placeholder="new list..."
-                      value={newList}
-                      onChange={(e) => setNewList(e.target.value)}
-                      className="w-full outline-none text-center"
-                    ></input>
-                  </form>
-                </Button>
-              </li>
-            </ul>
+              </ul>
+            )}
           </div>
         </div>
         <main className="p-6 h-screen text-center w-full">
