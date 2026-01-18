@@ -3,11 +3,11 @@ import type { TodoListResponse } from "../dto/responses/TodoListResponse";
 import type { CreateListRequest } from "../dto/requests/lists/CreateListRequest";
 import type { UpdateListRequest } from "../dto/requests/lists/UpdateListRequest";
 import { listsApi } from "../api/listsApi";
+import { useError } from "./ErrorContext";
 
 interface ListsContextType {
   lists: TodoListResponse[];
   isLoading: boolean;
-  error: string;
   fetchLists: () => Promise<void>;
 
   createList: (data: CreateListRequest) => void;
@@ -20,7 +20,7 @@ const ListsContext = createContext<ListsContextType | undefined>(undefined);
 export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
   const [lists, setLists] = useState<TodoListResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>("");
+  const { showError } = useError();
 
   const fetchLists = async () => {
     try {
@@ -29,7 +29,7 @@ export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
       setLists(data);
     } catch (err) {
       console.error(err);
-      setError("Error loading tasks");
+      showError("Error loading tasks");
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +45,7 @@ export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
       setLists((prev) => [...prev, newList]);
     } catch (err) {
       console.error(err);
-      alert("Error creating task");
+      showError("Error creating task");
     }
   };
 
@@ -61,7 +61,7 @@ export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       console.error(err);
       setLists((prev) => prev.map((t) => (t.id === oldList.id ? oldList : t)));
-      setError("Error updating task");
+      showError("Error updating task");
     }
   };
 
@@ -75,6 +75,7 @@ export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
         return { ...prev, deletedTag: deletedList };
       });
       console.error(err);
+      showError("Error deleting list");
     }
   };
 
@@ -83,7 +84,6 @@ export const ListsProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         lists,
         isLoading,
-        error,
         fetchLists,
         createList,
         updateList,

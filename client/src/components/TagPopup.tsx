@@ -6,7 +6,7 @@ import { Popup } from "./Popup";
 import { useTagsContext } from "../context/TagsContext";
 
 export const TagPopup = () => {
-  const { tags, isLoading, error, createTag, deleteTag } = useTagsContext();
+  const { tags, isLoading, createTag, deleteTag } = useTagsContext();
   const [createdTag, setCreatedTag] = useState("");
 
   const handleTagCreation = (e: React.FormEvent) => {

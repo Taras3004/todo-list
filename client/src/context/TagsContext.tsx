@@ -2,11 +2,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
 import type { CreateTaskTagRequest } from "../dto/requests/taskTags/CreateTaskTagRequest";
 import { tagsApi } from "../api/tagsApi";
+import { useError } from "./ErrorContext";
 
 interface TagsContextType {
   tags: TaskTagResponse[];
   isLoading: boolean;
-  error: string;
   fetchTags: () => Promise<void>;
 
   createTag: (data: CreateTaskTagRequest) => void;
@@ -18,7 +18,8 @@ const TagsContext = createContext<TagsContextType | undefined>(undefined);
 export const TagsProvider = ({ children }: { children: React.ReactNode }) => {
   const [tags, setTags] = useState<TaskTagResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>("");
+
+  const { showError } = useError();
 
   const fetchTags = async () => {
     try {
@@ -27,7 +28,7 @@ export const TagsProvider = ({ children }: { children: React.ReactNode }) => {
       setTags(data);
     } catch (err) {
       console.error(err);
-      setError("Error loading tasks");
+      showError("Error loading tags");
     } finally {
       setIsLoading(false);
     }
@@ -43,7 +44,7 @@ export const TagsProvider = ({ children }: { children: React.ReactNode }) => {
       setTags((prev) => [...prev, newList]);
     } catch (err) {
       console.error(err);
-      alert("Error creating task");
+      showError("Error creating tag");
     }
   };
 
@@ -57,12 +58,13 @@ export const TagsProvider = ({ children }: { children: React.ReactNode }) => {
         return { ...prev, deletedTag };
       });
       console.error(err);
+      showError("Error deleting tag");
     }
   };
 
   return (
     <TagsContext.Provider
-      value={{ tags, isLoading, error, fetchTags, createTag, deleteTag }}
+      value={{ tags, isLoading, fetchTags, createTag, deleteTag }}
     >
       {children}
     </TagsContext.Provider>

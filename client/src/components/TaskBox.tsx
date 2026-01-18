@@ -1,5 +1,6 @@
 import { Button } from "./Button";
-import { Square, SquareCheck, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { CheckBox } from "./Checkbox";
 
 interface TaskBoxProps {
   name: string;
@@ -29,9 +30,7 @@ export const TaskBox = ({
   return (
     <Button onClick={onClick} className="w-full text-left mb-2 shadow">
       <div className="grid grid-cols-[30px_max-content_1fr_30px]">
-        <div className="text-foreground" onClick={handleCheckBoxClick}>
-          {isCompleted ? <SquareCheck /> : <Square />}
-        </div>
+        <CheckBox isActive={isCompleted} onClick={handleCheckBoxClick} />
         <h1
           className={`truncate font-semibold ml-2 ${
             isCompleted && "line-through"

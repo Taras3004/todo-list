@@ -1,5 +1,5 @@
 import { Modal } from "../components/Modal";
-import { Tag, X, Calendar, SquareCheck, Square } from "lucide-react";
+import { Tag, X, Calendar } from "lucide-react";
 import { Button } from "../components/Button";
 import TextareaAutosize from "react-textarea-autosize";
 import { useTaskDetails } from "../hooks/useTaskDetails";
@@ -9,9 +9,10 @@ import { Popup } from "../components/Popup";
 import { useTasksContext } from "../context/TasksContext";
 import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
 import { useTagsContext } from "../context/TagsContext";
+import { CheckBox } from "../components/Checkbox";
 
 export const TaskDetails = () => {
-  const { task, tags: taskTags, error, addTag, removeTag } = useTaskDetails();
+  const { task, tags: taskTags, addTag, removeTag } = useTaskDetails();
   const { updateTask } = useTasksContext();
   const [description, setDescription] = useState<string>("");
   const [taskCompleted, setTaskCompleted] = useState(false);
@@ -55,12 +56,7 @@ export const TaskDetails = () => {
 
       <div className="pl-6 pr-6 pb-6">
         <div className="mb-4 flex gap-1 items-center justify-start">
-          <div
-            className="text-foreground mr-1"
-            onClick={() => toggleIsCompleted()}
-          >
-            {taskCompleted ? <SquareCheck /> : <Square />}
-          </div>
+          <CheckBox isActive={taskCompleted} onClick={toggleIsCompleted} />
           <p className="text-base">
             {task && `- task is ${taskCompleted ? "" : "not"} completed`}
           </p>

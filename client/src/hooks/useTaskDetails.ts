@@ -5,12 +5,14 @@ import type { TaskDetailsResponse } from "../dto/responses/TaskDetailsResponse";
 import type { UpdateTaskRequest } from "../dto/requests/tasks/UpdateTaskRequest";
 import type { AddTaskTagRequest } from "../dto/requests/tasks/AddTaskTagRequest";
 import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
+import { useError } from "../context/ErrorContext";
 
 export const useTaskDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<TaskDetailsResponse | null>(null);
   const [tags, setTags] = useState<TaskTagResponse[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+
+  const { showError } = useError();
 
   const fetchTask = async () => {
     if (!id) return;
@@ -21,7 +23,7 @@ export const useTaskDetails = () => {
       setTags(data.taskTags);
     } catch (err) {
       console.error(err);
-      setError("Error loading task");
+      showError("Error loading task");
     }
   };
 
@@ -36,7 +38,7 @@ export const useTaskDetails = () => {
       fetchTask();
     } catch (err) {
       console.log(err);
-      setError("Error adding tag");
+      showError("Error adding tag");
     }
   };
 
@@ -47,7 +49,7 @@ export const useTaskDetails = () => {
       fetchTask();
     } catch (err) {
       console.log(err);
-      setError("Error removing tag");
+      showError("Error removing tag");
     }
   };
 
@@ -68,9 +70,9 @@ export const useTaskDetails = () => {
       });
     } catch (err) {
       console.error(err);
-      setError("Error updating task");
+      showError("Error updating task");
     }
   };
 
-  return { task, error, tags, addTag, removeTag, updateTaskDetails };
+  return { task, tags, addTag, removeTag, updateTaskDetails };
 };

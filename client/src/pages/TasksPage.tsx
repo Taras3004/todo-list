@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import { listsApi } from "../api/listsApi";
 import { useTasksContext } from "../context/TasksContext";
 import { TaskBox } from "../components/TaskBox";
 import { Button } from "../components/Button";
@@ -18,15 +17,8 @@ export const TasksPage = () => {
   const todoListId = Number(listIdParam);
   const [newTask, setNewTask] = useState("");
 
-  const {
-    tasks,
-    isLoading,
-    error,
-    fetchTasks,
-    addTask,
-    updateTask,
-    deleteTask,
-  } = useTasksContext();
+  const { tasks, isLoading, fetchTasks, addTask, updateTask, deleteTask } =
+    useTasksContext();
 
   const { lists } = useListsContext();
 

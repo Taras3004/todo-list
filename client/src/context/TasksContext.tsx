@@ -3,11 +3,11 @@ import { tasksApi } from "../api/tasksApi";
 import type { TaskResponse } from "../dto/responses/TaskResponse";
 import type { CreateTaskRequest } from "../dto/requests/tasks/CreateTaskRequest";
 import type { UpdateTaskRequest } from "../dto/requests/tasks/UpdateTaskRequest";
+import { useError } from "./ErrorContext";
 
 interface TasksContextType {
   tasks: TaskResponse[];
   isLoading: boolean;
-  error: string | null;
   fetchTasks: (listId: number) => Promise<void>;
 
   updateTask: (updatedTask: UpdateTaskRequest) => void;
@@ -20,17 +20,17 @@ const TasksContext = createContext<TasksContextType | undefined>(undefined);
 export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const { showError } = useError();
 
   const fetchTasks = useCallback(async (listId: number) => {
     setIsLoading(true);
     try {
       const data = await tasksApi.getAll(listId);
       setTasks(data);
-      setError(null);
     } catch (err) {
       console.error(err);
-      setError("Unable to load tasks");
+      showError("Unable to load tasks");
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +51,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       console.error(err);
       setTasks((prev) => prev.map((t) => (t.id === oldTask.id ? oldTask : t)));
-      setError("Error updating task");
+      showError("Error updating task");
     }
   };
 
@@ -61,7 +61,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
       setTasks((prev) => [...prev, newTask]);
     } catch (err) {
       console.error(err);
-      alert("Error creating task");
+      showError("Error creating task");
     }
   };
 
@@ -75,7 +75,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
       setTasks((prev) => {
         return { ...prev, deletedTask };
       });
-      setError("Error deleting task");
+      showError("Error deleting task");
     }
   };
 
@@ -84,7 +84,6 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         tasks,
         isLoading,
-        error,
         fetchTasks,
         updateTask,
         addTask,
