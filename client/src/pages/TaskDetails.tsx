@@ -1,33 +1,71 @@
 import { Modal } from "../components/Modal";
-import { Tag, X, Calendar } from "lucide-react";
+import { Tag, X, Calendar, SquareCheck, Square } from "lucide-react";
 import { Button } from "../components/Button";
 import TextareaAutosize from "react-textarea-autosize";
 import { useTaskDetails } from "../hooks/useTaskDetails";
 import { useEffect, useState } from "react";
 import { CircleLoader } from "../components/CircleLoader";
+import { Popup } from "../components/Popup";
+import { useTasksContext } from "../context/TasksContext";
+import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
+import { useTagsContext } from "../context/TagsContext";
 
 export const TaskDetails = () => {
-  const { task, error, updateTaskDetails } = useTaskDetails();
+  const { task, tags: taskTags, error, addTag, removeTag } = useTaskDetails();
+  const { updateTask } = useTasksContext();
   const [description, setDescription] = useState<string>("");
-  const tags = task?.taskTags || [];
+  const [taskCompleted, setTaskCompleted] = useState(false);
+
+  const { tags: allTags } = useTagsContext();
+
+  const availableTags: TaskTagResponse[] = !taskTags
+    ? []
+    : allTags.filter((x) => !taskTags.some((y) => y.id === x.id));
 
   useEffect(() => {
     if (task) {
       setDescription(task.description || "");
+      setTaskCompleted(task.isCompleted);
     }
   }, [task]);
 
-  const handleUpdatingTask = () => {
-    updateTaskDetails({ ...task!, description });
+  const saveDescription = () => {
+    if (task && task.description !== description) {
+      updateTask({ ...task, description });
+    }
+  };
+
+  const toggleIsCompleted = () => {
+    if (!task) return;
+
+    const newValue: boolean = !taskCompleted;
+    setTaskCompleted(newValue);
+    {
+      updateTask({ ...task, isCompleted: newValue });
+    }
   };
 
   return (
-    <Modal
-      title={`Task - ${task?.name ?? "Loading..."}`}
-      onModalClosed={() => handleUpdatingTask()}
-    >
-      
+    <Modal>
+      <div className="flex justify-start items-center p-4">
+        <h1 className="text-xl font-bold text-foreground">
+          {`${task?.name ?? "Loading..."}`}
+        </h1>
+      </div>
+
       <div className="pl-6 pr-6 pb-6">
+        <div className="mb-4 flex gap-1 items-center justify-start">
+          <div
+            className="text-foreground mr-1"
+            onClick={() => toggleIsCompleted()}
+          >
+            {taskCompleted ? <SquareCheck /> : <Square />}
+          </div>
+          <p className="text-base">
+            {task && `- task is ${taskCompleted ? "" : "not"} completed`}
+          </p>
+        </div>
+
         <div className="mb-4 flex gap-1 items-center justify-start">
           <Calendar />
           <p className="text-base font-bold">Deadline</p>
@@ -38,17 +76,33 @@ export const TaskDetails = () => {
 
         <div className="mb-4 flex gap-1 items-center justify-start">
           <Tag />
-          <p className="text-base font-bold mr-1">Tags</p>
-          <p className="text-base flex gap-2">
-            {tags.map((tag) => (
-              <Button>
-                <div className="flex items-center justify-center">
-                  <p>{tag.tag}</p>
-                  <X className="ml-1 mr-1" size={15} />
-                </div>
-              </Button>
-            ))}
-          </p>
+          <Popup trigger={<p className="text-base font-bold mr-1">Tags</p>}>
+            {allTags && task && (
+              <div className="flex flex-col overflow-y-auto max-h-20 pr-3.5 gap-2">
+                {availableTags.map((availableTag) => (
+                  <Button
+                    className="p-2"
+                    onClick={() => addTag({ tagId: availableTag.id })}
+                  >
+                    {availableTag.tag}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </Popup>
+
+          <div className="text-base flex gap-2">
+            {task &&
+              taskTags &&
+              taskTags.map((tag) => (
+                <Button onClick={() => removeTag(tag.id)}>
+                  <div className="flex items-center justify-center">
+                    <p>{tag.tag}</p>
+                    <X className="ml-1 mr-1" size={15} />
+                  </div>
+                </Button>
+              ))}
+          </div>
         </div>
 
         <div className="mb-4">
@@ -59,6 +113,7 @@ export const TaskDetails = () => {
               placeholder="Enter description here..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              onBlur={saveDescription}
             />
           ) : (
             <CircleLoader />

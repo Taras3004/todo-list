@@ -1,11 +1,12 @@
-import { TaskBox } from "../components/TaskBox";
-import { ClipboardCheck } from "lucide-react";
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "../components/Button";
 import { useEffect, useState } from "react";
-import { useTasks } from "../hooks/useTasks";
+import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { listsApi } from "../api/listsApi";
+import { useTasksContext } from "../context/TasksContext";
+import { TaskBox } from "../components/TaskBox";
+import { Button } from "../components/Button";
 import { CircleLoader } from "../components/CircleLoader";
+import { ClipboardCheck } from "lucide-react";
+import { useListsContext } from "../context/ListsContext";
 
 export const TasksPage = () => {
   const [searchParams] = useSearchParams();
@@ -16,23 +17,25 @@ export const TasksPage = () => {
 
   const todoListId = Number(listIdParam);
   const [newTask, setNewTask] = useState("");
-  const { tasks, isLoading, error, createTask, deleteTask } =
-    useTasks(todoListId);
 
-  const [listName, setListName] = useState<string>("");
+  const {
+    tasks,
+    isLoading,
+    error,
+    fetchTasks,
+    addTask,
+    updateTask,
+    deleteTask,
+  } = useTasksContext();
+
+  const { lists } = useListsContext();
+
+  const currentList = lists.find((t) => t.id === todoListId);
+  const listName = currentList?.name || "";
 
   useEffect(() => {
-    const fetchListName = async () => {
-      try {
-        const response = await listsApi.get(todoListId);
-        setListName(response.name);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    fetchListName();
-  }, [todoListId]);
+    fetchTasks(todoListId);
+  }, [todoListId, fetchTasks]);
 
   let filteredTasks = tasks;
 
@@ -40,20 +43,19 @@ export const TasksPage = () => {
     e.preventDefault();
 
     if (newTask.trim() === "") return;
-    createTask({ name: newTask, todoListId });
+    addTask({ name: newTask, todoListId });
     setNewTask("");
   };
 
   const applyFilterIfExist = () => {
     if (initialNameParam.trim().length !== 0) {
       filteredTasks = tasks.filter((x) =>
-        x.name.toLowerCase().includes(initialNameParam)
+        x.name.toLowerCase().includes(initialNameParam),
       );
     }
   };
 
   applyFilterIfExist();
-  useEffect(applyFilterIfExist, [tasks]);
 
   if (todoListId === 0) {
     return (
@@ -79,7 +81,7 @@ export const TasksPage = () => {
             <TaskBox
               key={task.id}
               name={task.name}
-              isCompleted={false}
+              isCompleted={task.isCompleted}
               onClick={() =>
                 navigate(`${task.id.toString()}?${searchParams.toString()}`)
               }
@@ -88,6 +90,9 @@ export const TasksPage = () => {
                 e.stopPropagation();
                 deleteTask(task.id);
               }}
+              onCheckBoxClicked={() =>
+                updateTask({ ...task, isCompleted: !task.isCompleted })
+              }
             />
           ))}
           <Button className="w-full text-left">

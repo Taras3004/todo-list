@@ -18,7 +18,8 @@ public class GetTagsHandler(TodoListDbContext context) : IRequestHandler<GetTask
             tagsDto.Add(new TaskTagResponse()
             {
                 Id = tag.Id,
-                Tag = tag.Tag
+                Tag = tag.Tag,
+                Color = tag.Color,
             });
         }
 

@@ -5,14 +5,14 @@ import { Button } from "../components/Button";
 import { TagPopup } from "../components/TagPopup";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 import { SearchBar } from "../components/SearchBar";
-import { useLists } from "../hooks/useLists";
 import { useTaskFilters } from "../hooks/useTaskFilters";
 import { CircleLoader } from "../components/CircleLoader";
+import { useListsContext } from "../context/ListsContext";
 
 export const MainLayout = () => {
   const [isMenuOpen, ToggleMenu] = useState(true);
   const [newList, setNewList] = useState("");
-  const { lists, isLoading, error, createList, deleteList } = useLists();
+  const { lists, isLoading, error, createList, deleteList } = useListsContext();
   const { filters, resetFilters, updateTaskFilter } = useTaskFilters();
   const navigate = useNavigate();
 

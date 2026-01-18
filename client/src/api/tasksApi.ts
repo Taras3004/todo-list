@@ -28,7 +28,7 @@ export const tasksApi = {
 
   getAll: async (todoListId: number): Promise<TaskResponse[]> => {
     const response = await api.get<TaskResponse[]>(
-      `/task?todoListId=${todoListId}`
+      `/task?todoListId=${todoListId}`,
     );
     return response.data;
   },
