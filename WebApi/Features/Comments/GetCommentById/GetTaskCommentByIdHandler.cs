@@ -5,11 +5,14 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Comments.GetCommentById;
 
-public class GetTaskCommentByIdHandler(TodoListDbContext context) : IRequestHandler<GetTaskCommentByIdCommand, TaskCommentResponse?>
+public class GetTaskCommentByIdHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<GetTaskCommentByIdCommand, TaskCommentResponse?>
 {
     public async Task<TaskCommentResponse?> Handle(GetTaskCommentByIdCommand request, CancellationToken cancellationToken)
     {
-        var comment = await context.TaskComments.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
+        var comment = await context.TaskComments.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId, cancellationToken);
 
         if (comment == null)
         {

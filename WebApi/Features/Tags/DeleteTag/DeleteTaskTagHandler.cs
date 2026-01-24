@@ -4,11 +4,14 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.DeleteTag;
 
-public class DeleteTaskTagHandler(TodoListDbContext context) : IRequestHandler<DeleteTaskTagCommand, bool>
+public class DeleteTaskTagHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<DeleteTaskTagCommand, bool>
 {
     public async Task<bool> Handle(DeleteTaskTagCommand request, CancellationToken cancellationToken)
     {
-        var tag = await context.TaskTags.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
+        var tag = await context.TaskTags.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId, cancellationToken);
 
         if (tag == null)
         {

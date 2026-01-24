@@ -5,11 +5,14 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tags.GetTagById;
 
-public class GetTaskTagByIdHandler(TodoListDbContext context) : IRequestHandler<GetTaskTagByIdCommand, TaskTagResponse?>
+public class GetTaskTagByIdHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<GetTaskTagByIdCommand, TaskTagResponse?>
 {
     public async Task<TaskTagResponse?> Handle(GetTaskTagByIdCommand request, CancellationToken cancellationToken)
     {
-        var tag = await context.TaskTags.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
+        var tag = await context.TaskTags.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId, cancellationToken);
 
         if (tag == null)
         {

@@ -29,7 +29,7 @@ public static class AddJwtTokenServicesExtensions
                 ValidAudience = bindJwtSettings.ValidAudience,
                 RequireExpirationTime = bindJwtSettings.RequireExpirationTime,
                 ValidateLifetime = bindJwtSettings.ValidateLifetime,
-                ClockSkew = TimeSpan.FromDays(1),
+                ClockSkew = TimeSpan.Zero,
             };
         });
     }

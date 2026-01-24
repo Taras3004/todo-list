@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Model.Entities.TodoDb;
 
-public class TodoTask : BaseEntity
+public class TodoTask : BaseEntity, IUserOwnedEntity
 {
     [ForeignKey(nameof(TodoList))]
     public int TodoListId { get; set; }
@@ -18,6 +18,8 @@ public class TodoTask : BaseEntity
     public TodoList TodoList { get; set; }
 
     public TodoTaskPage TaskPage { get; set; }
+
+    public string UserId { get; set; }
 
     public ICollection<TagToTask> TagToTasks { get; set; } = [];
 }

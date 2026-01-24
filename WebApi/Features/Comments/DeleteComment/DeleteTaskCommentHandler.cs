@@ -4,11 +4,14 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Comments.DeleteComment;
 
-public class DeleteCommentHandler(TodoListDbContext context) : IRequestHandler<DeleteTaskCommentCommand, bool>
+public class DeleteCommentHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<DeleteTaskCommentCommand, bool>
 {
     public async Task<bool> Handle(DeleteTaskCommentCommand request, CancellationToken cancellationToken)
     {
-        var comment = await context.TaskComments.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
+        var comment = await context.TaskComments.FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId, cancellationToken);
 
         if (comment == null)
         {

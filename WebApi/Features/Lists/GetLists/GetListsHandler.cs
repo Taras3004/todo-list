@@ -5,11 +5,16 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Lists.GetLists;
 
-public class GetListsHandler(TodoListDbContext context) : IRequestHandler<GetListsCommand, List<TodoListResponse>>
+public class GetListsHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<GetListsCommand, List<TodoListResponse>>
 {
     public async Task<List<TodoListResponse>> Handle(GetListsCommand request, CancellationToken cancellationToken)
     {
-        var lists = await context.Todos.ToListAsync(cancellationToken);
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
+        var lists = await context.Todos
+                .Where(x => x.UserId == userId)
+                .ToListAsync(cancellationToken);
 
         var listsDto = new List<TodoListResponse>();
 

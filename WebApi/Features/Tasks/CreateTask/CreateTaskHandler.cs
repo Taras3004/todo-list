@@ -4,22 +4,26 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.CreateTask;
 
-public class CreateTaskHandler(TodoListDbContext context) : IRequestHandler<CreateTaskCommand, TaskResponse>
+public class CreateTaskHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<CreateTaskCommand, TaskResponse>
 {
     public async Task<TaskResponse> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
         var task = new TodoTask()
         {
             Name = request.Name,
             TodoListId = request.TodoListId,
             Deadline = request.Deadline,
+            UserId = userId,
         };
 
         var taskPage = new TodoTaskPage()
         {
             Task = task,
             Description = request.Description,
-            UserId = "13123",
+            UserId = userId,
         };
 
         context.Tasks.Add(task);

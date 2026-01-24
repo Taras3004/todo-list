@@ -5,13 +5,16 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.UpdateTask;
 
-public class UpdateTaskHandler(TodoListDbContext context) : IRequestHandler<UpdateTaskCommand, TaskDetailsResponse?>
+public class UpdateTaskHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<UpdateTaskCommand, TaskDetailsResponse?>
 {
     public async Task<TaskDetailsResponse?> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
         var existingTask = await context.Tasks
             .Include(task => task.TaskPage)
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.Id && x.UserId == userId, cancellationToken);
 
         if (existingTask == null || existingTask.TaskPage == null)
         {

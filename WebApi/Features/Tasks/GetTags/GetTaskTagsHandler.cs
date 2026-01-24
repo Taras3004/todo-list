@@ -4,12 +4,15 @@ using WebApi.Model.Entities.TodoDb;
 
 namespace WebApi.Features.Tasks.GetTags;
 
-public class GetTaskTagsHandler(TodoListDbContext context) : IRequestHandler<GetTaskTagsCommand, List<TaskTag>>
+public class GetTaskTagsHandler(TodoListDbContext context, IHttpContextAccessor http) : IRequestHandler<GetTaskTagsCommand, List<TaskTag>>
 {
     public async Task<List<TaskTag>> Handle(GetTaskTagsCommand request, CancellationToken cancellationToken)
     {
+        var user = (http.HttpContext?.User) ?? throw new UnauthorizedAccessException();
+        var userId = user.GetUserId();
+
         var currentTaskTags = context.TagToTask
-            .Where(tagToTask => tagToTask.TodoTaskId == request.TaskId)
+            .Where(tagToTask => tagToTask.TodoTaskId == request.TaskId && tagToTask.Task.UserId == userId)
             .Join(context.TaskTags, tagToTask => tagToTask.TaskTagId, tag => tag.Id, (task, tag) => new TaskTag()
             {
                 Id = tag.Id,

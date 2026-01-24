@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,7 @@ public record LoginDto(string Email, string Password);
 public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
     : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
@@ -43,6 +45,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, IConfigura
         return this.Ok("User created successfully!");
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
@@ -63,14 +66,14 @@ public class AuthController(UserManager<ApplicationUser> userManager, IConfigura
         var jwtIssuer = configuration["JsonWebTokenKeys:ValidIssuer"];
         var jwtAudience = configuration["JsonWebTokenKeys:ValidAudience"];
 
-
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!), new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
