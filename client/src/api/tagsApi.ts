@@ -1,7 +1,7 @@
 import type { CreateTaskTagRequest } from "../dto/requests/taskTags/CreateTaskTagRequest";
 import type { UpdateTaskTagRequest } from "../dto/requests/taskTags/UpdateTaskTagRequest";
 import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
-import { api } from "./axiosInstance";
+import { api } from "./instance/axiosInstance";
 
 export const tagsApi = {
   create: async (data: CreateTaskTagRequest): Promise<TaskTagResponse> => {

@@ -9,10 +9,6 @@ using WebApi.Model.Entities.UsersDb;
 
 namespace WebApi.Controllers;
 
-public record RegisterDto(string Email, string Password, string ConfirmPassword);
-
-public record LoginDto(string Email, string Password);
-
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
@@ -20,22 +16,22 @@ public class AuthController(UserManager<ApplicationUser> userManager, IConfigura
 {
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
     {
-        if (registerDto.Password != registerDto.ConfirmPassword)
+        if (registerRequest.Password != registerRequest.ConfirmPassword)
         {
             return this.BadRequest("Password confirmation is not correct.");
         }
 
-        var userExists = await userManager.FindByEmailAsync(registerDto.Email);
+        var userExists = await userManager.FindByEmailAsync(registerRequest.Email);
         if (userExists != null)
         {
             return this.BadRequest("User with this email already exists.");
         }
 
-        var user = new ApplicationUser { Email = registerDto.Email, UserName = registerDto.Email };
+        var user = new ApplicationUser { Email = registerRequest.Email, UserName = registerRequest.Email };
 
-        var result = await userManager.CreateAsync(user, registerDto.Password);
+        var result = await userManager.CreateAsync(user, registerRequest.Password);
 
         if (!result.Succeeded)
         {
@@ -47,11 +43,11 @@ public class AuthController(UserManager<ApplicationUser> userManager, IConfigura
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        var user = await userManager.FindByEmailAsync(loginDto.Email);
+        var user = await userManager.FindByEmailAsync(loginRequest.Email);
 
-        if (user != null && await userManager.CheckPasswordAsync(user, loginDto.Password))
+        if (user != null && await userManager.CheckPasswordAsync(user, loginRequest.Password))
         {
             var token = this.GenerateJwtToken(user);
             return this.Ok(new { token });

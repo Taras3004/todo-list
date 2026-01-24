@@ -25,8 +25,8 @@ public class TaskController(IMediator mediator) : ControllerBase
             request.Description,
             request.TodoListId
         );
-        var taskResponse = await mediator.Send(command);
 
+        var taskResponse = await mediator.Send(command);
         return this.Ok(taskResponse);
     }
 

@@ -24,6 +24,7 @@ export const TasksProvider = ({ children }: { children: React.ReactNode }) => {
   const { showError } = useError();
 
   const fetchTasks = useCallback(async (listId: number) => {
+    if (listId === 0) return;
     setIsLoading(true);
     try {
       const data = await tasksApi.getAll(listId);

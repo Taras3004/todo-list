@@ -1,10 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { TagsProvider } from "../context/TagsContext";
-import { TasksProvider } from "../context/TasksContext";
-import { ListsProvider } from "../context/ListsContext";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorProvider } from "../context/ErrorContext";
 import { ErrorToast } from "../components/ErrorToast";
+import { Outlet } from "react-router-dom";
 
 const CriticalCrashFallback = () => (
   <div className="h-screen flex items-center justify-center bg-red-50">
@@ -12,18 +9,12 @@ const CriticalCrashFallback = () => (
   </div>
 );
 
-export const ContextWrapper = () => {
+export const ErrorWrapper = () => {
   return (
     <ErrorBoundary FallbackComponent={CriticalCrashFallback}>
       <ErrorProvider>
-        <TasksProvider>
-          <TagsProvider>
-            <ListsProvider>
-              <ErrorToast />
-              <Outlet />
-            </ListsProvider>
-          </TagsProvider>
-        </TasksProvider>
+        <ErrorToast />
+        <Outlet />
       </ErrorProvider>
     </ErrorBoundary>
   );

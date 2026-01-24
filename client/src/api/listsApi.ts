@@ -1,7 +1,7 @@
 import type { CreateListRequest } from "../dto/requests/lists/CreateListRequest";
 import type { UpdateListRequest } from "../dto/requests/lists/UpdateListRequest";
 import type { TodoListResponse } from "../dto/responses/TodoListResponse";
-import { api } from "./axiosInstance";
+import { api } from "./instance/axiosInstance";
 
 export const listsApi = {
   create: async (data: CreateListRequest): Promise<TodoListResponse> => {

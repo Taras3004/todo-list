@@ -3,7 +3,7 @@ import type { TaskResponse } from "../dto/responses/TaskResponse";
 import type { UpdateTaskRequest } from "../dto/requests/tasks/UpdateTaskRequest";
 import type { TaskDetailsResponse } from "../dto/responses/TaskDetailsResponse";
 import type { AddTaskTagRequest } from "../dto/requests/tasks/AddTaskTagRequest";
-import { api } from "./axiosInstance";
+import { api } from "./instance/axiosInstance";
 import type { TaskTagResponse } from "../dto/responses/TaskTagResponse";
 
 export const tasksApi = {

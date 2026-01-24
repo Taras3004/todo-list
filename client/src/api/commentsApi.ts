@@ -1,12 +1,15 @@
 import type { CreateTaskCommentRequest } from "../dto/requests/taskComments/CreateTaskCommentRequest";
 import type { TaskCommentResponse } from "../dto/responses/TaskCommentRespose";
-import { api } from "./axiosInstance";
+import { api } from "./instance/axiosInstance";
 
 export const commentsApi = {
   create: async (
-    data: CreateTaskCommentRequest
+    data: CreateTaskCommentRequest,
   ): Promise<TaskCommentResponse> => {
-    const response = await api.post<TaskCommentResponse>("/TaskComment", data);
+    const response = await api.post<TaskCommentResponse>(
+      "/TaskComment",
+      data,
+    );
     return response.data;
   },
 
