@@ -1,0 +1,36 @@
+services:
+  mssql:
+    restart: always
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    mem_limit: 2048m
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Fd5Dz96Fv70!6
+    volumes:
+      - mssql_data:/var/opt/mssql
+    ports:
+      - 3004:1433
+  backend:
+    restart: always
+    build: ./WebApi
+    ports:
+      - 8080:8080
+    environment:
+      - ConnectionStrings__TodoDbConnection=Server=mssql;Database=TodoDb;User Id=sa;Password=Fd5Dz96Fv70!6;TrustServerCertificate=True;
+      - ConnectionStrings__UsersDbConnection=Server=mssql;Database=UsersDb;User Id=sa;Password=Fd5Dz96Fv70!6;TrustServerCertificate=True;
+      - ConnectionStrings__ClientConnection=http://localhost:3030
+      - JsonWebTokenKeys__ValidIssuer=http://localhost:8080
+      - JsonWebTokenKeys__ValidAudience=http://localhost:3030
+      - ASPNETCORE_URLS=http://+:8080
+
+    depends_on:
+      - mssql
+  frontend:
+    build: ./client
+    ports:
+      - 3030:80
+    depends_on:
+      - backend
+
+volumes:
+  mssql_data:

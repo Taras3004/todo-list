@@ -12,7 +12,7 @@ import { useListsContext } from "../context/ListsContext";
 export const MainLayout = () => {
   const [isMenuOpen, ToggleMenu] = useState(true);
   const [newList, setNewList] = useState("");
-  const { lists, isLoading, error, createList, deleteList } = useListsContext();
+  const { lists, isLoading, createList, deleteList } = useListsContext();
   const { filters, resetFilters, updateTaskFilter } = useTaskFilters();
   const navigate = useNavigate();
 

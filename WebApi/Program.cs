@@ -93,6 +93,17 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var todoContext = services.GetRequiredService<TodoListDbContext>();
+    var usersContext = services.GetRequiredService<UsersDbContext>();
+
+    todoContext.Database.Migrate();
+    usersContext.Database.Migrate();
+}
+
 app.UseHttpsRedirection();
 
 app.UseCors("AllowReactClient");
